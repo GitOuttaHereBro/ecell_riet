@@ -249,10 +249,10 @@ export default function LandingPage() {
       
       {/* NAVBAR */}
       <motion.nav 
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: navHidden ? -100 : 0, opacity: navHidden ? 0 : 1 }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="fixed top-6 left-1/2 -translate-x-1/2 z-40 w-[90%] max-w-5xl bg-white/[0.02] backdrop-blur-md border border-white/5 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] rounded-full"
+        initial={{ y: -100, x: "-50%", opacity: 0 }}
+        animate={{ y: navHidden ? -100 : 0, x: "-50%", opacity: navHidden ? 0 : 1 }}
+        transition={{ duration: 0.5, ease: "easeInOut" }}
+        className="fixed top-6 left-1/2 z-40 w-[90%] max-w-5xl bg-white/[0.02] backdrop-blur-md border border-white/5 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] rounded-full"
       >
         <div className="px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
