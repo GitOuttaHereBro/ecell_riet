@@ -313,7 +313,7 @@ export default function LandingPage() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="fixed top-0 right-0 h-full w-4/5 max-w-sm bg-[#030712]/90 backdrop-blur-md border-l border-white/10 z-50 md:hidden flex flex-col p-8 shadow-2xl"
+              className="fixed top-0 right-0 h-full w-4/5 max-w-sm bg-white/[0.02] backdrop-blur-2xl border-l border-white/5 z-50 md:hidden flex flex-col p-8 shadow-[0_0_40px_rgba(0,0,0,0.5)]"
             >
               <div className="flex justify-end mb-8">
                 <button 
