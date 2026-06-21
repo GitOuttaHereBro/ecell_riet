@@ -189,8 +189,49 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#030712] text-slate-200 font-sans selection:bg-indigo-500/30 selection:text-indigo-200 overflow-x-hidden !scroll-smooth">
       
+      {/* NAVBAR */}
+      <nav className="fixed top-0 left-0 w-full z-50 bg-[#030712]/80 backdrop-blur-xl border-b border-slate-800/50">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+             <div className="relative flex items-center justify-center w-10 h-10 rounded-full bg-slate-900 border border-slate-700 overflow-hidden shadow-[0_0_15px_rgba(99,102,241,0.2)]">
+                {/* Fallback initials if image doesn't load */}
+                <span className="text-xs font-bold text-slate-400">EC</span>
+                {/* Logo Image */}
+                <img src="/logo.png" alt="E-CELL RIET" className="absolute inset-0 w-full h-full object-cover z-10" onError={(e) => (e.currentTarget.style.opacity = '0')} />
+             </div>
+             <div className="flex flex-col">
+               <span className="text-sm font-bold text-white tracking-wider leading-tight">E-CELL</span>
+               <span className="text-[10px] text-indigo-400 font-mono tracking-widest uppercase">Riet</span>
+             </div>
+          </div>
+          
+          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+             <a href="#how-it-works" onClick={(e) => handleSmoothScroll(e, 'how-it-works')} className="hover:text-white transition-colors">Program</a>
+             <a href="#voices" onClick={(e) => handleSmoothScroll(e, 'voices')} className="hover:text-white transition-colors">Voices</a>
+             <a href="#contact" onClick={(e) => handleSmoothScroll(e, 'contact')} className="hover:text-white transition-colors">Contact</a>
+          </div>
+
+          <div className="flex flex-row items-center gap-4">
+             <motion.a 
+               href={GOOGLE_FORM_LINK}
+               target="_blank"
+               rel="noopener noreferrer"
+               whileHover={{ scale: 1.05 }}
+               whileTap={{ scale: 0.95 }}
+               className="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2 rounded-full text-sm font-bold transition-colors shadow-[0_0_15px_rgba(79,70,229,0.3)] hidden sm:flex"
+             >
+               Apply Now
+             </motion.a>
+             {/* Mobile Menu Icon Fallback */}
+             <button className="md:hidden text-slate-300 p-2">
+                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+             </button>
+          </div>
+        </div>
+      </nav>
+
       {/* 1. HERO SECTION */}
-      <header className="relative min-h-screen flex flex-col justify-center">
+      <header className="relative min-h-screen flex flex-col justify-center pt-20">
         {/* Immersive Background */}
         <div className="absolute inset-0 -z-10 overflow-hidden">
           <motion.div style={{ y: y1 }} className="absolute inset-0 will-change-transform">
@@ -1156,8 +1197,12 @@ export default function LandingPage() {
       {/* 8. FOOTER */}
       <footer className="py-16 border-t border-white/10 text-center bg-[#020617] relative">
         <div className="absolute inset-0 bg-gradient-to-t from-indigo-950/20 to-transparent pointer-events-none"></div>
-        <div className="space-y-6 text-sm text-slate-500 relative z-10">
-          <div className="mb-8">
+        <div className="space-y-6 text-sm text-slate-500 relative z-10 flex flex-col items-center">
+          <div className="mb-4 flex flex-col items-center">
+            <div className="relative flex items-center justify-center w-16 h-16 rounded-full bg-slate-900 border border-slate-700 overflow-hidden shadow-[0_0_15px_rgba(99,102,241,0.2)] mb-4">
+                <span className="text-sm font-bold text-slate-400">EC</span>
+                <img src="/logo.png" alt="E-CELL RIET Logo" className="absolute inset-0 w-full h-full object-cover z-10" onError={(e) => (e.currentTarget.style.opacity = '0')} />
+            </div>
             <p className="font-bold text-white text-2xl tracking-tight mb-2">E-Cell RIET</p>
             <p className="text-slate-400">Rajasthan Institute of Engineering & Technology, Jaipur</p>
           </div>
@@ -1170,7 +1215,7 @@ export default function LandingPage() {
 
           <p className="text-indigo-400 font-mono text-xs tracking-widest uppercase mb-8">Innovation • Execution • Growth</p>
 
-          <div className="pt-8 border-t border-white/5 max-w-md mx-auto mt-8 px-6">
+          <div className="pt-8 border-t border-white/5 max-w-md mx-auto px-6 w-full">
             <p className="text-xs opacity-40">© {new Date().getFullYear()} E-Cell RIET. All Rights Reserved.</p>
             <p className="text-xs opacity-30 mt-2">Built by builders, for builders.</p>
           </div>
