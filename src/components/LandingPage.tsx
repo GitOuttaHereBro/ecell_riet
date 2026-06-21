@@ -706,7 +706,14 @@ export default function LandingPage() {
                   className="grid md:grid-cols-3 gap-6"
                 >
                   {timelineStages[activeTimelineStage].milestones.map((milestone, idx) => (
-                    <div key={idx} className="bg-slate-900/40 border border-slate-800 rounded-2xl p-8 backdrop-blur-sm shadow-xl hover:border-indigo-500/30 hover:bg-slate-800/60 transition-all group">
+                    <motion.div 
+                      key={idx} 
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: "-20px" }}
+                      transition={{ duration: 0.5, delay: idx * 0.15, ease: "easeOut" }}
+                      className="bg-slate-900/40 border border-slate-800 rounded-2xl p-8 backdrop-blur-sm shadow-xl hover:border-indigo-500/30 hover:bg-slate-800/60 transition-all group"
+                    >
                       <div className="w-10 h-10 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center font-mono text-xs font-bold mb-6 group-hover:bg-indigo-500/20 group-hover:text-indigo-300 transition-colors">
                         {idx + 1}
                       </div>
@@ -716,7 +723,7 @@ export default function LandingPage() {
                       <p className="text-slate-400 text-sm leading-relaxed">
                         {milestone.desc}
                       </p>
-                    </div>
+                    </motion.div>
                   ))}
                 </motion.div>
               </AnimatePresence>
