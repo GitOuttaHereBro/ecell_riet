@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent }
 import { ArrowRight, CheckCircle, Clock, Target, Users, Zap, ChevronRight, ExternalLink, Phone, MessageCircle, Instagram, Quote, Mail, Lightbulb, Globe, User, Calendar, DollarSign, AlertCircle, Linkedin, ChevronDown, Info, TestTube, Hammer, Rocket } from 'lucide-react';
 
 import { InteractiveParticles } from './InteractiveParticles';
+import { useLenis } from 'lenis/react';
 
 const GOOGLE_FORM_LINK = "https://docs.google.com/forms/d/e/1FAIpQLSdKRM7wXrG_F-mQyrAdKOM6A8FRKgH3ydPtQXiWaf3u01L0JQ/viewform?usp=publish-editor";
 
@@ -27,7 +28,7 @@ const FadeIn: React.FC<FadeInProps> = ({ children, delay = 0, className = "" }) 
     initial={{ opacity: 0, y: 40, scale: 0.95 }}
     whileInView={{ opacity: 1, y: 0, scale: 1 }}
     viewport={{ once: false, margin: "-10%" }}
-    transition={{ type: "spring", stiffness: 100, damping: 20, delay, mass: 1 }}
+    transition={{ type: "spring", stiffness: 60, damping: 20, delay, mass: 1 }}
     className={className}
   >
     {children}
@@ -97,7 +98,7 @@ const SectionTitle = ({ children, className = "" }: { children: React.ReactNode;
     initial={{ opacity: 0, y: 30, scale: 0.95 }}
     whileInView={{ opacity: 1, y: 0, scale: 1 }}
     viewport={{ once: false, margin: "-10%" }}
-    transition={{ type: "spring", stiffness: 80, damping: 20, mass: 1 }}
+    transition={{ type: "spring", stiffness: 50, damping: 20, mass: 1 }}
     className={className}
   >
     {children}
@@ -110,7 +111,7 @@ const Section = ({ className, children, id }: { className?: string; children: Re
     initial={{ opacity: 0, y: 50 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: false, amount: 0.1 }}
-    transition={{ type: "spring", stiffness: 60, damping: 25, mass: 1.2 }}
+    transition={{ type: "spring", stiffness: 40, damping: 20, mass: 1.2 }}
     className={`py-24 px-6 md:px-12 max-w-7xl mx-auto ${className}`}
   >
     {children}
@@ -118,6 +119,7 @@ const Section = ({ className, children, id }: { className?: string; children: Re
 );
 
 export default function LandingPage() {
+  const lenis = useLenis();
   const { scrollY } = useScroll();
   const [navHidden, setNavHidden] = useState(false);
 
@@ -193,9 +195,13 @@ export default function LandingPage() {
 
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
     e.preventDefault();
-    const element = document.getElementById(targetId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    if (lenis) {
+      lenis.scrollTo(`#${targetId}`, { offset: -80, duration: 1.5, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+    } else {
+      const element = document.getElementById(targetId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 
@@ -757,7 +763,7 @@ export default function LandingPage() {
                       initial={{ opacity: 0, y: 30, scale: 0.95 }}
                       whileInView={{ opacity: 1, y: 0, scale: 1 }}
                       viewport={{ once: false, margin: "-10%" }}
-                      transition={{ type: "spring", stiffness: 100, damping: 20, delay: idx * 0.1 }}
+                      transition={{ type: "spring", stiffness: 60, damping: 20, delay: idx * 0.1 }}
                       className="bg-slate-900/40 border border-slate-800 rounded-2xl p-8 backdrop-blur-sm shadow-xl hover:border-indigo-500/30 hover:bg-slate-800/60 transition-all group hover:-translate-y-2 hover:shadow-indigo-500/10"
                     >
                       <div className="w-10 h-10 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center font-mono text-xs font-bold mb-6 group-hover:bg-indigo-500/20 group-hover:text-indigo-300 transition-colors">
