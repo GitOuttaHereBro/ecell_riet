@@ -285,6 +285,7 @@ export default function LandingPage() {
              {[
                { name: 'Program', id: 'how-it-works' },
                { name: 'Voices', id: 'voices' },
+               { name: 'Partner', id: 'partner' },
                { name: 'Contact', id: 'contact' }
              ].map((item, idx) => (
                  <motion.a 
@@ -364,6 +365,10 @@ export default function LandingPage() {
                 </a>
                 <a href="#voices" onClick={(e) => { handleSmoothScroll(e, 'voices'); setIsMobileMenuOpen(false); }} className="hover:text-indigo-400 transition-colors py-3 border-b border-white/5 flex items-center justify-between group">
                   Voices
+                  <ChevronRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
+                </a>
+                <a href="#partner" onClick={(e) => { handleSmoothScroll(e, 'partner'); setIsMobileMenuOpen(false); }} className="hover:text-indigo-400 transition-colors py-3 border-b border-white/5 flex items-center justify-between group">
+                  Partner
                   <ChevronRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
                 </a>
                 <a href="#contact" onClick={(e) => { handleSmoothScroll(e, 'contact'); setIsMobileMenuOpen(false); }} className="hover:text-indigo-400 transition-colors py-3 border-b border-white/5 flex items-center justify-between group">
@@ -1447,6 +1452,51 @@ export default function LandingPage() {
           </FadeIn>
       </Section>
 
+      {/* 7.5 PARTNERSHIPS & SPONSORS */}
+      <Section id="partner" className="mb-32">
+        <FadeIn delay={0.2}>
+          <div className="max-w-5xl mx-auto bg-gradient-to-br from-slate-900/80 to-slate-950/80 backdrop-blur-xl border border-indigo-500/20 p-12 sm:p-20 rounded-[3rem] shadow-[0_0_40px_rgba(99,102,241,0.1)] relative overflow-hidden text-center group hover:border-indigo-500/40 transition-colors duration-500">
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.15),transparent_50%)] opacity-50 group-hover:opacity-100 transition-opacity duration-700"></div>
+            
+            <div className="relative z-10">
+              <div className="w-16 h-16 bg-indigo-500/20 rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-[0_0_30px_rgba(99,102,241,0.3)] border border-indigo-500/30">
+                <Globe className="w-8 h-8 text-indigo-400 group-hover:scale-110 transition-transform duration-500" />
+              </div>
+              
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 text-white">Partner with <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-blue-400">E-Cell RIET</span></h2>
+              
+              <p className="text-slate-400 max-w-2xl mx-auto text-lg mb-10 leading-relaxed">
+                Looking to hire elite talent, sponsor our upcoming hackathons, or speak at our next summit? We are actively looking for visionary partners, investors, and industry leaders to collaborate with our ecosystem.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row justify-center gap-6">
+                <motion.a 
+                  href="mailto:riet.ecell@gmail.com?subject=Sponsorship%20%2F%20Partnership%20Enquiry"
+                  whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(255,255,255,0.4)" }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  className="inline-flex items-center justify-center gap-3 bg-white text-slate-900 px-8 py-4 rounded-full text-lg font-bold hover:bg-slate-200 transition-all shadow-[0_0_30px_rgba(255,255,255,0.2)] group/btn"
+                >
+                  <DollarSign className="w-5 h-5 text-indigo-600 group-hover/btn:scale-110 group-hover/btn:rotate-6 transition-transform" />
+                  Sponsor Us
+                </motion.a>
+                
+                <motion.a 
+                  href="mailto:riet.ecell@gmail.com?subject=Speaker%20%2F%20Mentor%20Enquiry"
+                  whileHover={{ scale: 1.05, backgroundColor: "rgba(30, 41, 59, 0.8)", borderColor: "rgba(148, 163, 184, 0.8)" }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  className="inline-flex items-center justify-center gap-3 bg-slate-900/50 text-white px-8 py-4 rounded-full text-lg font-bold border border-slate-700 hover:border-slate-500 transition-all shadow-xl group/btn2"
+                >
+                  <MessageCircle className="w-5 h-5 text-indigo-400 group-hover/btn2:scale-110 group-hover/btn2:-rotate-6 transition-transform" />
+                  Speak at E-Cell
+                </motion.a>
+              </div>
+            </div>
+          </div>
+        </FadeIn>
+      </Section>
+
       {/* 8. FOOTER */}
       <footer className="py-16 border-t border-white/10 text-center bg-[#020617] relative">
         <div className="absolute inset-0 bg-gradient-to-t from-indigo-950/20 to-transparent pointer-events-none"></div>
@@ -1472,9 +1522,6 @@ export default function LandingPage() {
           <p className="text-indigo-400 font-mono text-xs tracking-widest uppercase mb-8">Innovation • Execution • Growth</p>
 
           <div className="pt-8 border-t border-white/5 max-w-md mx-auto px-6 w-full flex flex-col items-center gap-4">
-            <a href="/admin" className="text-indigo-400 hover:text-indigo-300 transition-colors text-xs font-semibold tracking-wider uppercase">
-              Admin Forms Dashboard
-            </a>
             <div>
               <p className="text-xs opacity-40">© {new Date().getFullYear()} E-Cell RIET. All Rights Reserved.</p>
               <p className="text-xs opacity-30 mt-2">Built by builders, for builders.</p>
