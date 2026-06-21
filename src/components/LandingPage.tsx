@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import { ArrowRight, CheckCircle, Clock, Target, Users, Zap, ChevronRight, ExternalLink, Phone, MessageCircle, Instagram, Quote, Mail, Lightbulb, Globe, User, Calendar, DollarSign, AlertCircle, Linkedin, ChevronDown, Info, TestTube, Hammer, Rocket } from 'lucide-react';
 
+import { InteractiveParticles } from './InteractiveParticles';
+
 const GOOGLE_FORM_LINK = "https://docs.google.com/forms/d/e/1FAIpQLSdKRM7wXrG_F-mQyrAdKOM6A8FRKgH3ydPtQXiWaf3u01L0JQ/viewform?usp=publish-editor";
+
 const INSTAGRAM_LINK = "https://www.instagram.com/ecell_riet?igsh=MThvZHdlOThwbXJxeQ==";
 const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/ENTpUc2WWwiLRuabTSoRVj/";
 const LINKEDIN_LINK = "https://www.linkedin.com/in/ecell-riet?utm_source=share_via&utm_content=profile&utm_medium=member_android";
@@ -208,30 +211,7 @@ export default function LandingPage() {
           
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 mix-blend-overlay"></div>
           
-          {/* Floating Particles */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            {[...Array(2)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute bg-indigo-400 rounded-full opacity-20 will-change-transform"
-                style={{
-                  width: Math.random() * 3 + 1 + "px",
-                  height: Math.random() * 3 + 1 + "px",
-                  top: Math.random() * 100 + "%",
-                  left: Math.random() * 100 + "%",
-                }}
-                animate={{
-                  y: [0, -10, 0],
-                }}
-                transition={{
-                  duration: Math.random() * 8 + 8,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: Math.random() * 2,
-                }}
-              />
-            ))}
-          </div>
+          <InteractiveParticles />
         </div>
 
         <FadeIn>
