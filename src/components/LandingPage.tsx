@@ -767,18 +767,18 @@ export default function LandingPage() {
                       <AnimatePresence>
                         {hoveredGraphPoint !== null && (
                           <foreignObject 
-                            x={graphPoints[hoveredGraphPoint].x > 300 ? graphPoints[hoveredGraphPoint].x - 220 : graphPoints[hoveredGraphPoint].x - 110} 
+                            x={graphPoints[hoveredGraphPoint].x > 300 ? graphPoints[hoveredGraphPoint].x - 220 : graphPoints[hoveredGraphPoint].x < 100 ? graphPoints[hoveredGraphPoint].x - 20 : graphPoints[hoveredGraphPoint].x - 110} 
                             y={graphPoints[hoveredGraphPoint].y - 110} 
                             width="240" 
                             height="110" 
                             className="pointer-events-none overflow-visible"
                           >
-                            <div xmlns="http://www.w3.org/1999/xhtml" className="flex flex-col items-center justify-end h-full pb-4 relative">
+                            <div xmlns="http://www.w3.org/1999/xhtml" className={`flex flex-col justify-end h-full pb-4 relative ${graphPoints[hoveredGraphPoint].x < 100 ? 'items-start' : graphPoints[hoveredGraphPoint].x > 300 ? 'items-end' : 'items-center'}`}>
                               <motion.div
                                 initial={{ opacity: 0, y: 10, scale: 0.9 }}
                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                 exit={{ opacity: 0, y: 10, scale: 0.9 }}
-                                className="bg-slate-900/90 backdrop-blur-md border border-slate-700 p-3 rounded-xl shadow-2xl text-center min-w-[200px] w-[200px]"
+                                className="bg-slate-900/90 backdrop-blur-md border border-slate-700 p-3 rounded-xl shadow-2xl text-center min-w-[200px] w-[200px] relative"
                               >
                                 <h4 className={`text-[11px] font-bold uppercase tracking-wider mb-1 ${hoveredGraphPoint === 1 ? 'text-red-400' : 'text-indigo-400'}`}>
                                   {graphPoints[hoveredGraphPoint].label}
@@ -786,7 +786,7 @@ export default function LandingPage() {
                                 <p className="text-[10px] text-slate-300 leading-tight">
                                   {graphPoints[hoveredGraphPoint].desc}
                                 </p>
-                                <div className={`absolute top-full -mt-px border-4 border-transparent border-t-slate-700 ${graphPoints[hoveredGraphPoint].x > 300 ? 'right-[20px]' : 'left-1/2 -translate-x-1/2'}`}></div>
+                                <div className={`absolute top-full -mt-px border-4 border-transparent border-t-slate-700 ${graphPoints[hoveredGraphPoint].x > 300 ? 'right-[20px]' : graphPoints[hoveredGraphPoint].x < 100 ? 'left-[20px]' : 'left-1/2 -translate-x-1/2'}`}></div>
                               </motion.div>
                             </div>
                           </foreignObject>
