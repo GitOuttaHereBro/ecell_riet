@@ -121,10 +121,10 @@ export default function LandingPage() {
   const [hoveredGraphPoint, setHoveredGraphPoint] = useState<number | null>(null);
 
   const graphPoints = [
-    { x: 50, y: 250, label: "Day 1", desc: "The Idea Phase. Excitement is high, but validation is zero." },
-    { x: 130, y: 270, label: "The Trough", desc: "The 'Valley of Death'. Most give up here. Real builders persist." },
-    { x: 230, y: 150, label: "Product-Market Fit", desc: "Traction begins. The market pulls the product out of you." },
-    { x: 360, y: 50, label: "Unicorn Status", desc: "Asymmetric Advantage achieved. Market dominance." }
+    { x: 50, y: 260, label: "Day 1", desc: "The Idea Phase. Excitement is high, but validation is zero." },
+    { x: 140, y: 300, label: "The Trough", desc: "The 'Valley of Death'. Most give up here. Real builders persist." },
+    { x: 242, y: 185, label: "Product-Market Fit", desc: "Traction begins. The market pulls the product out of you." },
+    { x: 360, y: 70, label: "Unicorn Status", desc: "Asymmetric Advantage achieved. Market dominance." }
   ];
 
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
@@ -340,27 +340,27 @@ export default function LandingPage() {
               </div>
             </FadeIn>
           </div>
-          <FadeIn delay={0.2}>
-             <div className="relative h-full min-h-[350px] rounded-2xl overflow-hidden bg-slate-900/30 border border-slate-800 group">
+          <FadeIn delay={0.2} className="h-full">
+             <div className="relative h-full min-h-[400px] rounded-2xl overflow-hidden bg-slate-900/30 border border-slate-800 group flex flex-col">
                 {/* Dynamic Background Effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-transparent to-blue-500/5"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-transparent to-blue-500/5 pointer-events-none z-0"></div>
                 <motion.div 
-                  className="absolute -top-20 -right-20 w-64 h-64 bg-indigo-500/20 rounded-full blur-[80px]"
+                  className="absolute -top-20 -right-20 w-64 h-64 bg-indigo-500/20 rounded-full blur-[80px] z-0 pointer-events-none"
                   animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
                   transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
                 />
                 <motion.div 
-                  className="absolute -bottom-20 -left-20 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px]"
+                  className="absolute bottom-0 -left-20 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px] z-0 pointer-events-none"
                   animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.5, 0.2] }}
                   transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                 />
                 
                 {/* Grid Background */}
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_80%)]"></div>
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_80%)] z-0 pointer-events-none"></div>
 
                 {/* Graph Visualization */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-80 group-hover:opacity-100 transition-opacity duration-700">
-                   <svg width="100%" height="100%" viewBox="0 0 400 320" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
+                <div className="relative z-10 flex-1 flex items-center justify-center opacity-80 group-hover:opacity-100 transition-opacity duration-700 w-full pt-8 pb-4 min-h-[250px]">
+                   <svg width="100%" height="100%" viewBox="0 -80 400 400" className="w-full h-full overflow-visible" preserveAspectRatio="xMidYMid meet">
                       <defs>
                         <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                           <stop offset="0%" stopColor="#6366f1" stopOpacity="0.5" />
@@ -381,17 +381,18 @@ export default function LandingPage() {
                       </defs>
 
                       {/* Axes */}
-                      <line x1="50" y1="280" x2="360" y2="280" stroke="rgba(148, 163, 184, 0.3)" strokeWidth="1" />
-                      <line x1="50" y1="280" x2="50" y2="40" stroke="rgba(148, 163, 184, 0.3)" strokeWidth="1" />
+                      <line x1="50" y1="320" x2="380" y2="320" stroke="rgba(148, 163, 184, 0.3)" strokeWidth="1" />
+                      <line x1="50" y1="320" x2="50" y2="50" stroke="rgba(148, 163, 184, 0.3)" strokeWidth="1" />
                       
                       {/* Grid Lines */}
-                      <line x1="50" y1="220" x2="360" y2="220" stroke="rgba(148, 163, 184, 0.05)" strokeWidth="1" />
-                      <line x1="50" y1="160" x2="360" y2="160" stroke="rgba(148, 163, 184, 0.05)" strokeWidth="1" />
-                      <line x1="50" y1="100" x2="360" y2="100" stroke="rgba(148, 163, 184, 0.05)" strokeWidth="1" />
+                      <line x1="50" y1="260" x2="380" y2="260" stroke="rgba(148, 163, 184, 0.05)" strokeWidth="1" />
+                      <line x1="50" y1="200" x2="380" y2="200" stroke="rgba(148, 163, 184, 0.05)" strokeWidth="1" />
+                      <line x1="50" y1="140" x2="380" y2="140" stroke="rgba(148, 163, 184, 0.05)" strokeWidth="1" />
+                      <line x1="50" y1="80" x2="380" y2="80" stroke="rgba(148, 163, 184, 0.05)" strokeWidth="1" />
                       
                       {/* Standard Path (Linear Career) */}
                       <motion.path
-                        d="M 50 250 L 360 180"
+                        d="M 50 260 L 360 180"
                         fill="transparent"
                         stroke="rgba(255, 255, 255, 0.15)"
                         strokeWidth="2"
@@ -402,11 +403,10 @@ export default function LandingPage() {
                       />
 
                       {/* Founder Path (J-Curve) */}
-                      {/* Path definition: Start(50,250) -> Dip(130,310) -> Rise(220,150) -> Peak(360,50) */}
                       
                       {/* Area under the curve */}
                       <motion.path
-                        d="M 50 250 C 90 250 130 290 190 230 C 250 170 290 50 360 50 L 360 280 L 50 280 Z"
+                        d="M 50 260 C 90 260 110 300 140 300 C 200 300 280 70 360 70 L 360 320 L 50 320 Z"
                         fill="url(#areaGradient)"
                         stroke="none"
                         initial={{ opacity: 0 }}
@@ -416,7 +416,7 @@ export default function LandingPage() {
 
                       {/* The J-Curve Line */}
                       <motion.path
-                        d="M 50 250 C 90 250 130 290 190 230 C 250 170 290 50 360 50"
+                        d="M 50 260 C 90 260 110 300 140 300 C 200 300 280 70 360 70"
                         fill="transparent"
                         stroke="url(#lineGradient)"
                         strokeWidth="4"
@@ -429,7 +429,7 @@ export default function LandingPage() {
                       
                       {/* Valley of Death Marker */}
                       <motion.circle
-                        cx="130" cy="270" r="3"
+                        cx="140" cy="300" r="3"
                         fill="#ef4444"
                         initial={{ scale: 0 }}
                         whileInView={{ scale: 1 }}
@@ -441,7 +441,7 @@ export default function LandingPage() {
                         <animateMotion
                            dur="3s"
                            repeatCount="indefinite"
-                           path="M 50 250 C 90 250 130 290 190 230 C 250 170 290 50 360 50"
+                           path="M 50 260 C 90 260 110 300 140 300 C 200 300 280 70 360 70"
                            calcMode="spline"
                            keyTimes="0;1"
                            keySplines="0.4 0 0.2 1"
@@ -451,7 +451,7 @@ export default function LandingPage() {
                       
                       {/* Advantage Gap Line */}
                       <motion.line
-                        x1="360" y1="180" x2="360" y2="60"
+                        x1="360" y1="180" x2="360" y2="70"
                         stroke="#818cf8"
                         strokeWidth="1"
                         strokeDasharray="4 4"
@@ -463,23 +463,24 @@ export default function LandingPage() {
                       {/* Advantage Label with Tooltip */}
                       <g className="group/tooltip">
                         <motion.text
-                          x="350" y="120"
-                          textAnchor="end"
+                          x="354" y="125"
+                          transform="rotate(-90 354 125)"
+                          textAnchor="middle"
                           fill="#818cf8"
-                          fontSize="11"
+                          fontSize="10"
                           fontWeight="bold"
                           fontFamily="monospace"
-                          initial={{ opacity: 0, y: 10 }}
-                          whileInView={{ opacity: 1, y: 0 }}
+                          initial={{ opacity: 0 }}
+                          whileInView={{ opacity: 1 }}
                           transition={{ delay: 2.5, duration: 1 }}
-                          className="cursor-help"
+                          className="cursor-help uppercase tracking-wider"
                         >
                           Asymmetric Advantage
                         </motion.text>
                         {/* Hit area */}
-                        <rect x="200" y="105" width="160" height="20" fill="transparent" className="cursor-help" />
+                        <rect x="344" y="70" width="20" height="110" fill="transparent" className="cursor-help" />
                         
-                        <foreignObject x="150" y="30" width="220" height="100" className="opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-300 pointer-events-none">
+                        <foreignObject x="130" y="30" width="220" height="100" className="opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-300 pointer-events-none z-50">
                           <div xmlns="http://www.w3.org/1999/xhtml" className="w-full h-full flex items-end justify-end pb-2">
                              <div className="bg-slate-800 border border-slate-700 rounded-lg p-3 text-[10px] leading-tight text-slate-300 shadow-xl text-center w-full relative">
                                 Early execution creates a compounding lead that credentials alone cannot match.
@@ -494,21 +495,22 @@ export default function LandingPage() {
                         initial={{ scale: 0 }}
                         whileInView={{ scale: 1 }}
                         transition={{ delay: 2.2, type: "spring" }}
+                        style={{ transformOrigin: "360px 70px" }}
                       >
                         <motion.circle 
-                          cx="360" cy="50" r="6" 
+                          cx="360" cy="70" r="6" 
                           fill="#818cf8" 
                           animate={{ scale: [1, 1.2, 1] }}
                           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                         />
                         <motion.circle 
-                          cx="360" cy="50" r="12" 
+                          cx="360" cy="70" r="12" 
                           stroke="#818cf8" strokeWidth="1" fill="none"
                           animate={{ scale: [1, 2.5], opacity: [0.8, 0] }}
                           transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
                         />
                         <motion.circle 
-                          cx="360" cy="50" r="12" 
+                          cx="360" cy="70" r="12" 
                           stroke="#818cf8" strokeWidth="1" fill="none"
                           animate={{ scale: [1, 4], opacity: [0.6, 0] }}
                           transition={{ duration: 2, repeat: Infinity, ease: "easeOut", delay: 0.6 }}
@@ -575,10 +577,10 @@ export default function LandingPage() {
                    </svg>
                 </div>
 
-                {/* Content Overlay */}
-                <div className="relative z-10 p-8 flex flex-col justify-end h-full mt-20 bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent">
+                {/* Content Area */}
+                <div className="relative z-10 p-8 border-t border-white/5 bg-slate-900/40 backdrop-blur-sm mt-auto">
                    <div className="flex items-center gap-4 mb-3">
-                      <div className="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center border border-indigo-500/30 backdrop-blur-sm">
+                      <div className="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center border border-indigo-500/30 backdrop-blur-sm shadow-[0_0_15px_rgba(99,102,241,0.2)]">
                          <Zap className="w-5 h-5 text-indigo-400" />
                       </div>
                       <h3 className="text-xl font-bold text-white">Asymmetric Advantage</h3>
@@ -646,7 +648,7 @@ export default function LandingPage() {
                     className={`p-8 rounded-2xl border border-slate-800 bg-slate-900/50 backdrop-blur-sm transition-all duration-300 group ${i % 2 === 0 ? 'md:text-left' : 'md:text-right'}`}
                   >
                     <h3 className="text-2xl font-bold mb-2 text-white group-hover:text-indigo-300 transition-colors">{step.title}</h3>
-                    <p className="text-slate-400 leading-relaxed">{step.desc}</p>
+                    <div className="text-slate-400 leading-relaxed">{step.desc}</div>
                   </motion.div>
                 </div>
 
