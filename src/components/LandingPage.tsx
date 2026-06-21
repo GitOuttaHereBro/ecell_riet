@@ -282,9 +282,10 @@ export default function LandingPage() {
                rel="noopener noreferrer"
                whileHover={{ scale: 1.05 }}
                whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}
-               className="bg-white/10 hover:bg-white/20 border border-white/10 text-white px-5 py-2 rounded-full text-sm font-semibold transition-colors hidden sm:flex"
+               className="relative overflow-hidden group bg-white/10 hover:bg-white/20 border border-white/10 text-white px-5 py-2 rounded-full text-sm font-semibold transition-all shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:shadow-[0_0_25px_rgba(255,255,255,0.1)] hidden sm:flex"
              >
-               Apply Now
+               <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer" />
+               <span className="relative">Apply Now</span>
              </motion.a>
              {/* Mobile Menu Icon Fallback */}
              <button 
@@ -342,9 +343,10 @@ export default function LandingPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                  className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-4 mt-6 rounded-xl text-center font-semibold transition-colors shadow-lg shadow-indigo-500/20"
+                  className="relative overflow-hidden group bg-white text-[#030712] px-6 py-4 mt-6 rounded-xl text-center font-bold transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)]"
                 >
-                  Apply Now
+                  <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-[#030712]/10 to-transparent -translate-x-full animate-shimmer" />
+                  <span className="relative">Apply Now</span>
                 </motion.a>
               </div>
             </motion.div>
@@ -435,10 +437,12 @@ export default function LandingPage() {
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                className="group inline-flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-600 to-blue-700 text-white px-8 py-4 rounded-full text-lg font-bold hover:from-indigo-500 hover:to-blue-600 transition-all duration-300 shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_30px_rgba(79,70,229,0.6)] border border-white/10"
+                className="relative overflow-hidden group inline-flex items-center justify-center gap-3 bg-white text-[#030712] px-8 py-4 rounded-full text-lg font-bold hover:bg-slate-200 transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:shadow-[0_0_50px_rgba(255,255,255,0.4)]"
               >
-                Join E-cell
+                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-[#030712]/10 to-transparent -translate-x-full group-hover:animate-shimmer" />
+                <span className="relative">Join E-cell</span>
                 <motion.div
+                  className="relative"
                   animate={{ x: [0, 3, 0], y: [0, -3, 0] }}
                   transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                 >
@@ -450,7 +454,7 @@ export default function LandingPage() {
                 onClick={(e) => handleSmoothScroll(e, 'how-it-works')}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full text-lg font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all border border-slate-700 hover:border-slate-500"
+                className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full text-lg font-medium text-slate-300 bg-slate-900/50 backdrop-blur-md hover:text-white hover:bg-slate-800 transition-all border border-slate-700 hover:border-slate-500 shadow-xl"
               >
                 Explore the Program
               </motion.a>
@@ -1207,12 +1211,13 @@ export default function LandingPage() {
                     href="https://wa.me/919451901542" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 bg-slate-900 border border-slate-700 text-white px-6 py-3 rounded-full text-sm font-bold hover:bg-slate-800 hover:border-indigo-500 transition-all shadow-lg shadow-indigo-900/10 w-full justify-center group"
+                    className="relative overflow-hidden flex items-center gap-2 bg-slate-800 border border-slate-700 text-white px-6 py-3 rounded-full text-sm font-bold hover:bg-slate-700 hover:border-indigo-400 transition-all shadow-lg shadow-indigo-900/10 w-full justify-center group"
                   >
+                    <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer" />
                     <motion.div whileHover={{ scale: 1.2 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
-                      <WhatsAppIcon className="w-5 h-5 text-green-500" />
+                      <WhatsAppIcon className="w-5 h-5 text-green-400" />
                     </motion.div>
-                    Chat on WhatsApp
+                    <span className="relative">Chat on WhatsApp</span>
                   </a>
                 </div>
               </div>
@@ -1256,12 +1261,13 @@ export default function LandingPage() {
                     href="https://wa.me/919251072575" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 bg-slate-900 border border-slate-700 text-white px-6 py-3 rounded-full text-sm font-bold hover:bg-slate-800 hover:border-indigo-500 transition-all shadow-lg shadow-indigo-900/10 w-full justify-center group"
+                    className="relative overflow-hidden flex items-center gap-2 bg-slate-800 border border-slate-700 text-white px-6 py-3 rounded-full text-sm font-bold hover:bg-slate-700 hover:border-indigo-400 transition-all shadow-lg shadow-indigo-900/10 w-full justify-center group"
                   >
+                    <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer" />
                     <motion.div whileHover={{ scale: 1.2 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
-                      <WhatsAppIcon className="w-5 h-5 text-green-500" />
+                      <WhatsAppIcon className="w-5 h-5 text-green-400" />
                     </motion.div>
-                    Chat on WhatsApp
+                    <span className="relative">Chat on WhatsApp</span>
                   </a>
                 </div>
               </div>
