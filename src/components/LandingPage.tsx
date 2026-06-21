@@ -24,10 +24,10 @@ const WhatsAppIcon = ({ className }: { className?: string }) => (
 
 const FadeIn: React.FC<FadeInProps> = ({ children, delay = 0, className = "" }) => (
   <motion.div
-    initial={{ opacity: 0, y: 30 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: "-20px" }}
-    transition={{ duration: 0.6, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
+    initial={{ opacity: 0, y: 40, scale: 0.95 }}
+    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+    viewport={{ once: false, margin: "-10%" }}
+    transition={{ type: "spring", stiffness: 100, damping: 20, delay, mass: 1 }}
     className={className}
   >
     {children}
@@ -94,10 +94,10 @@ const FAQItem: React.FC<FAQItemProps> = ({ faq, index }) => {
 
 const SectionTitle = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <motion.h2
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: "-20px" }}
-    transition={{ duration: 0.7, ease: [0.21, 0.47, 0.32, 0.98] }}
+    initial={{ opacity: 0, y: 30, scale: 0.95 }}
+    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+    viewport={{ once: false, margin: "-10%" }}
+    transition={{ type: "spring", stiffness: 80, damping: 20, mass: 1 }}
     className={className}
   >
     {children}
@@ -107,10 +107,10 @@ const SectionTitle = ({ children, className = "" }: { children: React.ReactNode;
 const Section = ({ className, children, id }: { className?: string; children: React.ReactNode; id?: string }) => (
   <motion.section
     id={id}
-    initial={{ opacity: 0, y: 40 }}
+    initial={{ opacity: 0, y: 50 }}
     whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, amount: 0.2 }}
-    transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
+    viewport={{ once: false, amount: 0.1 }}
+    transition={{ type: "spring", stiffness: 60, damping: 25, mass: 1.2 }}
     className={`py-24 px-6 md:px-12 max-w-7xl mx-auto ${className}`}
   >
     {children}
@@ -132,6 +132,8 @@ export default function LandingPage() {
 
   const y1 = useTransform(scrollY, [0, 500], [0, 200]);
   const y2 = useTransform(scrollY, [0, 500], [0, -150]);
+  const y3 = useTransform(scrollY, [0, 500], [0, 400]);
+  const y4 = useTransform(scrollY, [0, 500], [0, -350]);
   const [hoveredGraphPoint, setHoveredGraphPoint] = useState<number | null>(null);
   const [activeTimelineStage, setActiveTimelineStage] = useState<number>(0);
 
@@ -202,16 +204,20 @@ export default function LandingPage() {
       
       {/* NAVBAR */}
       <motion.nav 
-        initial={{ y: -40, opacity: 0 }}
+        initial={{ y: -100, opacity: 0 }}
         animate={{ y: navHidden ? -100 : 0, opacity: navHidden ? 0 : 1 }}
-        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ type: "spring", stiffness: 50, damping: 20, mass: 1 }}
         className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-5xl bg-white/[0.02] backdrop-blur-3xl border border-white/5 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] rounded-full"
       >
         <div className="px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-             <div className="relative flex items-center justify-center w-10 h-10 rounded-full overflow-hidden">
+             <motion.div 
+               whileHover={{ rotate: 180 }}
+               transition={{ duration: 0.6, type: "spring" }}
+               className="relative flex items-center justify-center w-10 h-10 rounded-full overflow-hidden"
+             >
                 <img src="https://i.pinimg.com/originals/21/1b/14/211b146f35a794e359b1fbee0bf3ef93.png" alt="E-CELL RIET" className="w-full h-full object-cover" onError={(e) => (e.currentTarget.style.opacity = '0')} />
-             </div>
+             </motion.div>
              <div className="flex flex-col">
                <span className="text-sm font-bold text-white tracking-wider leading-tight">E-CELL</span>
                <span className="text-[10px] text-zinc-400 font-mono tracking-widest uppercase">Riet</span>
@@ -262,6 +268,23 @@ export default function LandingPage() {
               className="absolute bottom-0 right-0 w-[800px] h-[600px] bg-blue-900/10 rounded-full blur-[80px]"
             ></motion.div>
           </motion.div>
+
+          {/* Additional Subtle Parallax Elements */}
+          <motion.div style={{ y: y3 }} className="absolute select-none pointer-events-none top-40 left-[10%] opacity-20">
+            <motion.div 
+              animate={{ rotate: 360 }}
+              transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+              className="w-32 h-32 rounded-3xl border border-indigo-500/30"
+            ></motion.div>
+          </motion.div>
+          
+          <motion.div style={{ y: y4 }} className="absolute select-none pointer-events-none bottom-40 right-[15%] opacity-10">
+            <motion.div 
+              animate={{ rotate: -360 }}
+              transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+              className="w-48 h-48 rounded-full border border-slate-500/30"
+            ></motion.div>
+          </motion.div>
           
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 mix-blend-overlay"></div>
           
@@ -269,59 +292,67 @@ export default function LandingPage() {
         </div>
 
         <div className="px-6 md:px-12 max-w-7xl mx-auto w-full z-10 relative">
-          <FadeIn>
-          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-slate-900/50 border border-slate-700/50 backdrop-blur-md text-indigo-300 text-xs font-mono tracking-widest mb-8 shadow-2xl shadow-indigo-900/20 transition-all duration-500 hover:bg-slate-800/80 hover:border-indigo-500/40 hover:shadow-indigo-500/10 cursor-default">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-            </span>
-            E-CELL RIET STARTUP PROGRAM
-          </div>
+          <FadeIn delay={0.1}>
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-slate-900/50 border border-slate-700/50 backdrop-blur-md text-indigo-300 text-xs font-mono tracking-widest mb-8 shadow-2xl shadow-indigo-900/20 transition-all duration-500 hover:bg-slate-800/80 hover:border-indigo-500/40 hover:shadow-indigo-500/10 cursor-default">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+              </span>
+              E-CELL RIET STARTUP PROGRAM
+            </div>
+          </FadeIn>
           
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter leading-[0.95] mb-8 text-white">
-            Building RIET’s <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-indigo-200 to-slate-400 animate-gradient-x drop-shadow-sm">
-              First Unicorn.
-            </span>
-          </h1>
+          <FadeIn delay={0.2}>
+            <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter leading-[0.95] mb-8 text-white">
+              Building RIET’s <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-indigo-200 to-slate-400 animate-gradient-x drop-shadow-sm">
+                First Unicorn.
+              </span>
+            </h1>
+          </FadeIn>
           
-          <p className="text-xl md:text-2xl max-w-3xl font-light text-slate-300 mb-8 tracking-wide italic">
-            "Great companies don’t start with funding. They start with disciplined builders."
-          </p>
+          <FadeIn delay={0.3}>
+            <p className="text-xl md:text-2xl max-w-3xl font-light text-slate-300 mb-8 tracking-wide italic">
+              "Great companies don’t start with funding. They start with disciplined builders."
+            </p>
+          </FadeIn>
           
-          <p className="text-lg text-slate-500 max-w-xl mb-12 leading-relaxed border-l-2 border-indigo-500/30 pl-6">
-            A disciplined system to turn ideas into execution-ready startups. 
-            Join the movement to build the future.
-          </p>
+          <FadeIn delay={0.4}>
+            <p className="text-lg text-slate-500 max-w-xl mb-12 leading-relaxed border-l-2 border-indigo-500/30 pl-6">
+              A disciplined system to turn ideas into execution-ready startups. 
+              Join the movement to build the future.
+            </p>
+          </FadeIn>
           
-          <div className="flex flex-col sm:flex-row gap-4">
-            <motion.a 
-              href={GOOGLE_FORM_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="group inline-flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-600 to-blue-700 text-white px-8 py-4 rounded-full text-lg font-bold hover:from-indigo-500 hover:to-blue-600 transition-all duration-300 shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_30px_rgba(79,70,229,0.6)] border border-white/10"
-            >
-              Join E-cell
-              <motion.div
-                animate={{ x: [0, 3, 0], y: [0, -3, 0] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          <FadeIn delay={0.5}>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <motion.a 
+                href={GOOGLE_FORM_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="group inline-flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-600 to-blue-700 text-white px-8 py-4 rounded-full text-lg font-bold hover:from-indigo-500 hover:to-blue-600 transition-all duration-300 shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_30px_rgba(79,70,229,0.6)] border border-white/10"
               >
-                <ExternalLink className="w-5 h-5" />
-              </motion.div>
-            </motion.a>
-            <motion.a 
-              href="#how-it-works"
-              onClick={(e) => handleSmoothScroll(e, 'how-it-works')}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full text-lg font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all border border-slate-700 hover:border-slate-500"
-            >
-              Explore the Program
-            </motion.a>
-          </div>
-        </FadeIn>
+                Join E-cell
+                <motion.div
+                  animate={{ x: [0, 3, 0], y: [0, -3, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <ExternalLink className="w-5 h-5" />
+                </motion.div>
+              </motion.a>
+              <motion.a 
+                href="#how-it-works"
+                onClick={(e) => handleSmoothScroll(e, 'how-it-works')}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full text-lg font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all border border-slate-700 hover:border-slate-500"
+              >
+                Explore the Program
+              </motion.a>
+            </div>
+          </FadeIn>
         </div>
       </header>
 
@@ -723,11 +754,11 @@ export default function LandingPage() {
                   {timelineStages[activeTimelineStage].milestones.map((milestone, idx) => (
                     <motion.div 
                       key={idx} 
-                      initial={{ opacity: 0, y: 30 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, margin: "-20px" }}
-                      transition={{ duration: 0.5, delay: idx * 0.15, ease: "easeOut" }}
-                      className="bg-slate-900/40 border border-slate-800 rounded-2xl p-8 backdrop-blur-sm shadow-xl hover:border-indigo-500/30 hover:bg-slate-800/60 transition-all group"
+                      initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                      viewport={{ once: false, margin: "-10%" }}
+                      transition={{ type: "spring", stiffness: 100, damping: 20, delay: idx * 0.1 }}
+                      className="bg-slate-900/40 border border-slate-800 rounded-2xl p-8 backdrop-blur-sm shadow-xl hover:border-indigo-500/30 hover:bg-slate-800/60 transition-all group hover:-translate-y-2 hover:shadow-indigo-500/10"
                     >
                       <div className="w-10 h-10 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center font-mono text-xs font-bold mb-6 group-hover:bg-indigo-500/20 group-hover:text-indigo-300 transition-colors">
                         {idx + 1}
@@ -1054,9 +1085,13 @@ export default function LandingPage() {
               />
 
               <div className="relative z-10">
-                <div className="w-24 h-24 rounded-full mx-auto mb-6 flex items-center justify-center text-3xl font-bold text-white shadow-[0_0_20px_rgba(99,102,241,0.3)] group-hover:scale-110 transition-transform duration-300 relative overflow-hidden bg-slate-800">
+                <motion.div 
+                  whileHover={{ scale: 1.15, rotate: 5 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                  className="w-24 h-24 rounded-full mx-auto mb-6 flex items-center justify-center text-3xl font-bold text-white shadow-[0_0_20px_rgba(99,102,241,0.3)] relative overflow-hidden bg-slate-800"
+                >
                   <img src="https://i.pinimg.com/originals/25/0d/51/250d51aa644ad81810d1d7908838e7f5.jpg" alt="Alok Gupta" className="absolute inset-0 w-full h-full object-cover" />
-                </div>
+                </motion.div>
                 <h3 className="text-2xl font-bold mb-1 text-white">Alok Gupta</h3>
                 <p className="text-indigo-400 font-mono text-sm mb-8 tracking-widest uppercase">Founder</p>
                 
@@ -1099,9 +1134,13 @@ export default function LandingPage() {
               />
 
               <div className="relative z-10">
-                <div className="w-24 h-24 bg-gradient-to-br from-violet-500 to-purple-600 rounded-full mx-auto mb-6 flex items-center justify-center text-3xl font-bold text-white shadow-[0_0_20px_rgba(139,92,246,0.3)] group-hover:scale-110 transition-transform duration-300">
+                <motion.div 
+                  whileHover={{ scale: 1.15, rotate: -5 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                  className="w-24 h-24 bg-gradient-to-br from-violet-500 to-purple-600 rounded-full mx-auto mb-6 flex items-center justify-center text-3xl font-bold text-white shadow-[0_0_20px_rgba(139,92,246,0.3)] relative"
+                >
                   LK
-                </div>
+                </motion.div>
                 <h3 className="text-2xl font-bold mb-1 text-white">Lakshya Khatri</h3>
                 <p className="text-violet-400 font-mono text-sm mb-8 tracking-widest uppercase">Co-Founder</p>
                 
@@ -1144,9 +1183,13 @@ export default function LandingPage() {
               />
 
               <div className="relative z-10">
-                <div className="w-24 h-24 bg-gradient-to-br from-rose-500 to-red-600 rounded-full mx-auto mb-6 flex items-center justify-center text-3xl font-bold text-white shadow-[0_0_20px_rgba(244,63,94,0.3)] group-hover:scale-110 transition-transform duration-300">
+                <motion.div 
+                  whileHover={{ scale: 1.15, rotate: 5 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                  className="w-24 h-24 bg-gradient-to-br from-rose-500 to-red-600 rounded-full mx-auto mb-6 flex items-center justify-center text-3xl font-bold text-white shadow-[0_0_20px_rgba(244,63,94,0.3)] relative"
+                >
                   DM
-                </div>
+                </motion.div>
                 <h3 className="text-2xl font-bold mb-1 text-white">Dulari Ma'am</h3>
                 <p className="text-rose-400 font-mono text-sm mb-8 tracking-widest uppercase">Mentor</p>
               </div>
@@ -1219,9 +1262,13 @@ export default function LandingPage() {
         <div className="absolute inset-0 bg-gradient-to-t from-indigo-950/20 to-transparent pointer-events-none"></div>
         <div className="space-y-6 text-sm text-slate-500 relative z-10 flex flex-col items-center">
           <div className="mb-4 flex flex-col items-center">
-            <div className="relative flex items-center justify-center w-16 h-16 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] overflow-hidden p-1.5 mb-4">
+            <motion.div 
+              whileHover={{ scale: 1.15, rotate: [0, -5, 5, -5, 0] }}
+              transition={{ duration: 0.5 }}
+              className="relative flex items-center justify-center w-16 h-16 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] overflow-hidden p-1.5 mb-4"
+            >
                 <img src="https://i.pinimg.com/originals/21/1b/14/211b146f35a794e359b1fbee0bf3ef93.png" alt="E-CELL RIET Logo" className="w-full h-full object-cover rounded-xl" onError={(e) => (e.currentTarget.style.opacity = '0')} />
-            </div>
+            </motion.div>
             <p className="font-bold text-white text-2xl tracking-tight mb-2">E-Cell RIET</p>
             <p className="text-slate-400">Rajasthan Institute of Engineering & Technology, Jaipur</p>
           </div>
