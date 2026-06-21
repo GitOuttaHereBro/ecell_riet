@@ -214,7 +214,7 @@ export default function LandingPage() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: navHidden ? -100 : 0, opacity: navHidden ? 0 : 1 }}
         transition={{ type: "spring", stiffness: 50, damping: 20, mass: 1 }}
-        className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-5xl bg-white/[0.02] backdrop-blur-3xl border border-white/5 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] transition-all duration-300 ${isMobileMenuOpen ? 'rounded-3xl' : 'rounded-full'}`}
+        className="fixed top-6 left-1/2 -translate-x-1/2 z-40 w-[90%] max-w-5xl bg-white/[0.02] backdrop-blur-3xl border border-white/5 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] rounded-full"
       >
         <div className="px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -250,46 +250,69 @@ export default function LandingPage() {
              </motion.a>
              {/* Mobile Menu Icon Fallback */}
              <button 
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="md:hidden text-slate-300 p-2"
+                onClick={() => setIsMobileMenuOpen(true)}
+                className="md:hidden text-slate-300 p-2 hover:text-white transition-colors"
              >
-                 {isMobileMenuOpen ? (
-                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                 ) : (
-                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-                 )}
+                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
              </button>
           </div>
         </div>
+      </motion.nav>
 
-        {/* Mobile Dropdown */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
+      {/* Mobile Slide-out Menu */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
             <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="md:hidden overflow-hidden border-t border-white/10"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 md:hidden"
+            />
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="fixed top-0 right-0 h-full w-4/5 max-w-sm bg-[#030712]/90 backdrop-blur-3xl border-l border-white/10 z-50 md:hidden flex flex-col p-8 shadow-2xl"
             >
-              <div className="flex flex-col items-center gap-4 py-6 text-sm font-medium text-slate-300">
-                <a href="#how-it-works" onClick={(e) => { handleSmoothScroll(e, 'how-it-works'); setIsMobileMenuOpen(false); }} className="hover:text-white transition-colors w-full text-center py-2">Program</a>
-                <a href="#voices" onClick={(e) => { handleSmoothScroll(e, 'voices'); setIsMobileMenuOpen(false); }} className="hover:text-white transition-colors w-full text-center py-2">Voices</a>
-                <a href="#contact" onClick={(e) => { handleSmoothScroll(e, 'contact'); setIsMobileMenuOpen(false); }} className="hover:text-white transition-colors w-full text-center py-2">Contact</a>
+              <div className="flex justify-end mb-8">
+                <button 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="text-slate-300 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors"
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+              </div>
+
+              <div className="flex flex-col gap-6 text-lg font-medium text-slate-200">
+                <a href="#how-it-works" onClick={(e) => { handleSmoothScroll(e, 'how-it-works'); setIsMobileMenuOpen(false); }} className="hover:text-indigo-400 transition-colors py-3 border-b border-white/5 flex items-center justify-between group">
+                  Program
+                  <ChevronRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
+                </a>
+                <a href="#voices" onClick={(e) => { handleSmoothScroll(e, 'voices'); setIsMobileMenuOpen(false); }} className="hover:text-indigo-400 transition-colors py-3 border-b border-white/5 flex items-center justify-between group">
+                  Voices
+                  <ChevronRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
+                </a>
+                <a href="#contact" onClick={(e) => { handleSmoothScroll(e, 'contact'); setIsMobileMenuOpen(false); }} className="hover:text-indigo-400 transition-colors py-3 border-b border-white/5 flex items-center justify-between group">
+                  Contact
+                  <ChevronRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
+                </a>
                 <motion.a 
                   href={GOOGLE_FORM_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
                   whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                  className="bg-white/10 hover:bg-white/20 border border-white/10 text-white px-8 py-3 mt-2 rounded-full text-sm font-semibold transition-colors"
+                  className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-4 mt-6 rounded-xl text-center font-semibold transition-colors shadow-lg shadow-indigo-500/20"
                 >
                   Apply Now
                 </motion.a>
               </div>
             </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.nav>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* 1. HERO SECTION */}
       <header className="relative min-h-screen flex flex-col justify-center pt-20">
