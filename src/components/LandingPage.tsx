@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent } from 'motion/react';
+import React, { useState, useRef } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent, useSpring } from 'motion/react';
 import { ArrowRight, CheckCircle, Clock, Target, Users, Zap, ChevronRight, ExternalLink, Phone, MessageCircle, Instagram, Quote, Mail, Lightbulb, Globe, User, Calendar, DollarSign, AlertCircle, Linkedin, ChevronDown, Info, TestTube, Hammer, Rocket } from 'lucide-react';
 
 import { InteractiveParticles } from './InteractiveParticles';
@@ -23,17 +23,32 @@ const WhatsAppIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const FadeIn: React.FC<FadeInProps> = ({ children, delay = 0, className = "" }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 40, scale: 0.95 }}
-    whileInView={{ opacity: 1, y: 0, scale: 1 }}
-    viewport={{ once: false, margin: "-10%" }}
-    transition={{ type: "spring", stiffness: 60, damping: 20, delay, mass: 1 }}
-    className={className}
-  >
-    {children}
-  </motion.div>
-);
+const FadeIn: React.FC<FadeInProps> = ({ children, delay = 0, className = "" }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["0 1.1", "0.6 1"]
+  });
+
+  const springProgress = useSpring(scrollYProgress, { stiffness: 400, damping: 30, restDelta: 0.001 });
+  
+  const startOffset = Math.min(0.5, delay * 0.2);
+  const endOffset = Math.min(1, startOffset + 0.5);
+
+  const opacity = useTransform(springProgress, [startOffset, endOffset], [0, 1]);
+  const y = useTransform(springProgress, [startOffset, endOffset], [40, 0]);
+  const scale = useTransform(springProgress, [startOffset, endOffset], [0.95, 1]);
+
+  return (
+    <motion.div
+      ref={ref}
+      style={{ opacity, y, scale }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+};
 
 interface FAQItemProps {
   faq: {
@@ -93,30 +108,53 @@ const FAQItem: React.FC<FAQItemProps> = ({ faq, index }) => {
   );
 };
 
-const SectionTitle = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
-  <motion.h2
-    initial={{ opacity: 0, y: 30, scale: 0.95 }}
-    whileInView={{ opacity: 1, y: 0, scale: 1 }}
-    viewport={{ once: false, margin: "-10%" }}
-    transition={{ type: "spring", stiffness: 50, damping: 20, mass: 1 }}
-    className={className}
-  >
-    {children}
-  </motion.h2>
-);
+const SectionTitle = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => {
+  const ref = useRef<HTMLHeadingElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["0 1.1", "0.5 1"]
+  });
 
-const Section = ({ className, children, id }: { className?: string; children: React.ReactNode; id?: string }) => (
-  <motion.section
-    id={id}
-    initial={{ opacity: 0, y: 50 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: false, amount: 0.1 }}
-    transition={{ type: "spring", stiffness: 40, damping: 20, mass: 1.2 }}
-    className={`py-24 px-6 md:px-12 max-w-7xl mx-auto ${className}`}
-  >
-    {children}
-  </motion.section>
-);
+  const springProgress = useSpring(scrollYProgress, { stiffness: 300, damping: 25, restDelta: 0.001 });
+  
+  const opacity = useTransform(springProgress, [0, 1], [0, 1]);
+  const y = useTransform(springProgress, [0, 1], [30, 0]);
+  const scale = useTransform(springProgress, [0, 1], [0.95, 1]);
+
+  return (
+    <motion.h2
+      ref={ref}
+      style={{ opacity, y, scale }}
+      className={className}
+    >
+      {children}
+    </motion.h2>
+  );
+};
+
+const Section = ({ className, children, id }: { className?: string; children: React.ReactNode; id?: string }) => {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["0 1.1", "0.3 1"]
+  });
+
+  const springProgress = useSpring(scrollYProgress, { stiffness: 200, damping: 20, restDelta: 0.001 });
+
+  const opacity = useTransform(springProgress, [0, 1], [0, 1]);
+  const y = useTransform(springProgress, [0, 1], [50, 0]);
+
+  return (
+    <motion.section
+      id={id}
+      ref={ref}
+      style={{ opacity, y }}
+      className={`py-24 px-6 md:px-12 max-w-7xl mx-auto ${className}`}
+    >
+      {children}
+    </motion.section>
+  );
+};
 
 export default function LandingPage() {
   const lenis = useLenis();
@@ -819,12 +857,9 @@ export default function LandingPage() {
                   className="grid md:grid-cols-3 gap-6"
                 >
                   {timelineStages[activeTimelineStage].milestones.map((milestone, idx) => (
-                    <motion.div 
+                    <FadeIn 
                       key={idx} 
-                      initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                      viewport={{ once: false, margin: "-10%" }}
-                      transition={{ type: "spring", stiffness: 60, damping: 20, delay: idx * 0.1 }}
+                      delay={idx * 0.1}
                       className="bg-slate-900/40 border border-slate-800 rounded-2xl p-8 backdrop-blur-sm shadow-xl hover:border-indigo-500/30 hover:bg-slate-800/60 transition-all group hover:-translate-y-2 hover:shadow-indigo-500/10"
                     >
                       <div className="w-10 h-10 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center font-mono text-xs font-bold mb-6 group-hover:bg-indigo-500/20 group-hover:text-indigo-300 transition-colors">
@@ -836,7 +871,7 @@ export default function LandingPage() {
                       <p className="text-slate-400 text-sm leading-relaxed">
                         {milestone.desc}
                       </p>
-                    </motion.div>
+                    </FadeIn>
                   ))}
                 </motion.div>
               </AnimatePresence>
