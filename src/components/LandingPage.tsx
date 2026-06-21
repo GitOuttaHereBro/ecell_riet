@@ -277,9 +277,8 @@ export default function LandingPage() {
 
           <div className="flex flex-row items-center gap-4">
              <motion.a 
-               href={GOOGLE_FORM_LINK}
-               target="_blank"
-               rel="noopener noreferrer"
+               href="#apply"
+               onClick={(e) => handleSmoothScroll(e, 'apply')}
                whileHover={{ scale: 1.05 }}
                whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}
                className="relative overflow-hidden group bg-white/10 hover:bg-white/20 border border-white/10 text-white px-5 py-2 rounded-full text-sm font-semibold transition-all shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:shadow-[0_0_25px_rgba(255,255,255,0.1)] hidden sm:flex"
@@ -339,9 +338,8 @@ export default function LandingPage() {
                   <ChevronRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
                 </a>
                 <motion.a 
-                  href={GOOGLE_FORM_LINK}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="#apply"
+                  onClick={(e) => { handleSmoothScroll(e, 'apply'); setIsMobileMenuOpen(false); }}
                   whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}
                   className="relative overflow-hidden group bg-white text-[#030712] px-6 py-4 mt-6 rounded-xl text-center font-bold transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)]"
                 >
@@ -432,9 +430,8 @@ export default function LandingPage() {
           <FadeIn delay={0.5}>
             <div className="flex flex-col sm:flex-row gap-4">
               <motion.a 
-                href={GOOGLE_FORM_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#apply"
+                onClick={(e) => handleSmoothScroll(e, 'apply')}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}
                 className="relative overflow-hidden group inline-flex items-center justify-center gap-3 bg-white text-[#030712] px-8 py-4 rounded-full text-lg font-bold hover:bg-slate-200 transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:shadow-[0_0_50px_rgba(255,255,255,0.4)]"
@@ -1124,9 +1121,8 @@ export default function LandingPage() {
               </p>
               
               <motion.a 
-                href={GOOGLE_FORM_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#apply"
+                onClick={(e) => handleSmoothScroll(e, 'apply')}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}
                 className="inline-flex items-center gap-3 bg-gradient-to-r from-indigo-600 to-blue-700 text-white px-10 py-5 rounded-full text-xl font-bold hover:from-indigo-500 hover:to-blue-600 transition-all duration-300 shadow-[0_0_30px_rgba(79,70,229,0.4)] hover:shadow-[0_0_40px_rgba(79,70,229,0.6)] border border-white/10"
@@ -1160,6 +1156,35 @@ export default function LandingPage() {
             <FAQItem key={i} faq={faq} index={i} />
           ))}
         </div>
+      </Section>
+
+      {/* 6.5. APPLY NOW SECTION */}
+      <Section id="apply" className="mb-32">
+        <div className="text-center mb-16">
+          <SectionTitle className="text-4xl md:text-5xl font-bold tracking-tight mb-6">Apply Now</SectionTitle>
+          <FadeIn delay={0.2}>
+            <p className="text-slate-400 max-w-2xl mx-auto text-lg">
+              Take the first step towards building your startup. Submit your application below to join the cohort.
+            </p>
+          </FadeIn>
+        </div>
+
+        <FadeIn delay={0.4}>
+          <div className="w-full max-w-5xl mx-auto bg-slate-900/40 backdrop-blur-3xl border border-white/10 p-2 sm:p-4 rounded-[2rem] shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] h-[800px] sm:h-[1200px] overflow-hidden relative">
+             <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 pointer-events-none"></div>
+             <iframe
+               src="https://docs.google.com/forms/d/e/1FAIpQLSdKRM7wXrG_F-mQyrAdKOM6A8FRKgH3ydPtQXiWaf3u01L0JQ/viewform?embedded=true"
+               width="100%"
+               height="100%"
+               frameBorder="0"
+               marginHeight={0}
+               marginWidth={0}
+               className="rounded-2xl relative z-10 w-full h-full bg-transparent"
+             >
+               Loading…
+             </iframe>
+          </div>
+        </FadeIn>
       </Section>
 
       {/* LEADERSHIP & CONTACT SECTION */}
@@ -1389,9 +1414,14 @@ export default function LandingPage() {
 
           <p className="text-indigo-400 font-mono text-xs tracking-widest uppercase mb-8">Innovation • Execution • Growth</p>
 
-          <div className="pt-8 border-t border-white/5 max-w-md mx-auto px-6 w-full">
-            <p className="text-xs opacity-40">© {new Date().getFullYear()} E-Cell RIET. All Rights Reserved.</p>
-            <p className="text-xs opacity-30 mt-2">Built by builders, for builders.</p>
+          <div className="pt-8 border-t border-white/5 max-w-md mx-auto px-6 w-full flex flex-col items-center gap-4">
+            <a href="/admin" className="text-indigo-400 hover:text-indigo-300 transition-colors text-xs font-semibold tracking-wider uppercase">
+              Admin Forms Dashboard
+            </a>
+            <div>
+              <p className="text-xs opacity-40">© {new Date().getFullYear()} E-Cell RIET. All Rights Reserved.</p>
+              <p className="text-xs opacity-30 mt-2">Built by builders, for builders.</p>
+            </div>
           </div>
         </div>
       </footer>
