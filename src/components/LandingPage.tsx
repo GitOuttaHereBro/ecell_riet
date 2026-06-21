@@ -463,11 +463,11 @@ export default function LandingPage() {
                       {/* Advantage Label with Tooltip */}
                       <g className="group/tooltip">
                         <motion.text
-                          x="354" y="125"
-                          transform="rotate(-90 354 125)"
+                          x="346" y="130"
+                          transform="rotate(-90 346 130)"
                           textAnchor="middle"
                           fill="#818cf8"
-                          fontSize="10"
+                          fontSize="9"
                           fontWeight="bold"
                           fontFamily="monospace"
                           initial={{ opacity: 0 }}
@@ -478,9 +478,9 @@ export default function LandingPage() {
                           Asymmetric Advantage
                         </motion.text>
                         {/* Hit area */}
-                        <rect x="344" y="70" width="20" height="110" fill="transparent" className="cursor-help" />
+                        <rect x="336" y="85" width="20" height="90" fill="transparent" className="cursor-help" />
                         
-                        <foreignObject x="130" y="30" width="220" height="100" className="opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-300 pointer-events-none z-50">
+                        <foreignObject x="110" y="40" width="220" height="100" className="opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-300 pointer-events-none z-50">
                           <div xmlns="http://www.w3.org/1999/xhtml" className="w-full h-full flex items-end justify-end pb-2">
                              <div className="bg-slate-800 border border-slate-700 rounded-lg p-3 text-[10px] leading-tight text-slate-300 shadow-xl text-center w-full relative">
                                 Early execution creates a compounding lead that credentials alone cannot match.
@@ -549,18 +549,18 @@ export default function LandingPage() {
                       <AnimatePresence>
                         {hoveredGraphPoint !== null && (
                           <foreignObject 
-                            x={graphPoints[hoveredGraphPoint].x - 100} 
+                            x={graphPoints[hoveredGraphPoint].x > 300 ? graphPoints[hoveredGraphPoint].x - 180 : graphPoints[hoveredGraphPoint].x - 100} 
                             y={graphPoints[hoveredGraphPoint].y - 100} 
                             width="200" 
                             height="100" 
                             className="pointer-events-none overflow-visible"
                           >
-                            <div xmlns="http://www.w3.org/1999/xhtml" className="flex flex-col items-center justify-end h-full pb-4">
+                            <div xmlns="http://www.w3.org/1999/xhtml" className="flex flex-col items-center justify-end h-full pb-4 relative">
                               <motion.div
                                 initial={{ opacity: 0, y: 10, scale: 0.9 }}
                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                 exit={{ opacity: 0, y: 10, scale: 0.9 }}
-                                className="bg-slate-900/90 backdrop-blur-md border border-slate-700 p-3 rounded-xl shadow-2xl text-center min-w-[180px]"
+                                className="bg-slate-900/90 backdrop-blur-md border border-slate-700 p-3 rounded-xl shadow-2xl text-center min-w-[180px] w-full"
                               >
                                 <h4 className={`text-xs font-bold uppercase tracking-wider mb-1 ${hoveredGraphPoint === 1 ? 'text-red-400' : 'text-indigo-400'}`}>
                                   {graphPoints[hoveredGraphPoint].label}
@@ -568,7 +568,7 @@ export default function LandingPage() {
                                 <p className="text-[10px] text-slate-300 leading-tight">
                                   {graphPoints[hoveredGraphPoint].desc}
                                 </p>
-                                <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-px border-4 border-transparent border-t-slate-700"></div>
+                                <div className={`absolute top-full -mt-px border-4 border-transparent border-t-slate-700 ${graphPoints[hoveredGraphPoint].x > 300 ? 'right-[20px]' : 'left-1/2 -translate-x-1/2'}`}></div>
                               </motion.div>
                             </div>
                           </foreignObject>
