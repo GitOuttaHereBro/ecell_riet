@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent } from 'motion/react';
 import { ArrowRight, CheckCircle, Clock, Target, Users, Zap, ChevronRight, ExternalLink, Phone, MessageCircle, Instagram, Quote, Mail, Lightbulb, Globe, User, Calendar, DollarSign, AlertCircle, Linkedin, ChevronDown, Info, TestTube, Hammer, Rocket } from 'lucide-react';
 
 import { InteractiveParticles } from './InteractiveParticles';
@@ -119,6 +119,17 @@ const Section = ({ className, children, id }: { className?: string; children: Re
 
 export default function LandingPage() {
   const { scrollY } = useScroll();
+  const [navHidden, setNavHidden] = useState(false);
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious() ?? 0;
+    if (latest > previous && latest > 150) {
+      setNavHidden(true);
+    } else {
+      setNavHidden(false);
+    }
+  });
+
   const y1 = useTransform(scrollY, [0, 500], [0, 200]);
   const y2 = useTransform(scrollY, [0, 500], [0, -150]);
   const [hoveredGraphPoint, setHoveredGraphPoint] = useState<number | null>(null);
@@ -190,16 +201,20 @@ export default function LandingPage() {
     <div className="min-h-screen bg-[#030712] text-slate-200 font-sans selection:bg-indigo-500/30 selection:text-indigo-200 overflow-x-hidden !scroll-smooth">
       
       {/* NAVBAR */}
-      <nav className="fixed top-0 left-0 w-full z-50 bg-[#030712]/80 backdrop-blur-xl border-b border-slate-800/50">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+      <motion.nav 
+        initial={{ y: -40, opacity: 0 }}
+        animate={{ y: navHidden ? -100 : 0, opacity: navHidden ? 0 : 1 }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-5xl bg-white/[0.02] backdrop-blur-3xl border border-white/5 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] rounded-full"
+      >
+        <div className="px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-             <div className="relative flex items-center justify-center w-12 h-12 rounded-xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] overflow-hidden p-1">
-                {/* Logo Image */}
-                <img src="https://i.pinimg.com/originals/21/1b/14/211b146f35a794e359b1fbee0bf3ef93.png" alt="E-CELL RIET" className="w-full h-full object-cover rounded-lg" onError={(e) => (e.currentTarget.style.opacity = '0')} />
+             <div className="relative flex items-center justify-center w-10 h-10 rounded-full overflow-hidden">
+                <img src="https://i.pinimg.com/originals/21/1b/14/211b146f35a794e359b1fbee0bf3ef93.png" alt="E-CELL RIET" className="w-full h-full object-cover" onError={(e) => (e.currentTarget.style.opacity = '0')} />
              </div>
              <div className="flex flex-col">
                <span className="text-sm font-bold text-white tracking-wider leading-tight">E-CELL</span>
-               <span className="text-[10px] text-indigo-400 font-mono tracking-widest uppercase">Riet</span>
+               <span className="text-[10px] text-zinc-400 font-mono tracking-widest uppercase">Riet</span>
              </div>
           </div>
           
@@ -216,7 +231,7 @@ export default function LandingPage() {
                rel="noopener noreferrer"
                whileHover={{ scale: 1.05 }}
                whileTap={{ scale: 0.95 }}
-               className="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2 rounded-full text-sm font-bold transition-colors shadow-[0_0_15px_rgba(79,70,229,0.3)] hidden sm:flex"
+               className="bg-white/10 hover:bg-white/20 border border-white/10 text-white px-5 py-2 rounded-full text-sm font-semibold transition-colors hidden sm:flex"
              >
                Apply Now
              </motion.a>
@@ -226,7 +241,7 @@ export default function LandingPage() {
              </button>
           </div>
         </div>
-      </nav>
+      </motion.nav>
 
       {/* 1. HERO SECTION */}
       <header className="relative min-h-screen flex flex-col justify-center pt-20">
