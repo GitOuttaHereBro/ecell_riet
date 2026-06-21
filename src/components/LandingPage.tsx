@@ -193,11 +193,9 @@ export default function LandingPage() {
       <nav className="fixed top-0 left-0 w-full z-50 bg-[#030712]/80 backdrop-blur-xl border-b border-slate-800/50">
         <div className="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-             <div className="relative flex items-center justify-center w-10 h-10 rounded-full bg-slate-900 border border-slate-700 overflow-hidden shadow-[0_0_15px_rgba(99,102,241,0.2)]">
-                {/* Fallback initials if image doesn't load */}
-                <span className="text-xs font-bold text-slate-400">EC</span>
+             <div className="relative flex items-center justify-center w-12 h-12 rounded-xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] overflow-hidden p-1">
                 {/* Logo Image */}
-                <img src="/logo.png" alt="E-CELL RIET" className="absolute inset-0 w-full h-full object-cover z-10" onError={(e) => (e.currentTarget.style.opacity = '0')} />
+                <img src="https://i.pinimg.com/originals/21/1b/14/211b146f35a794e359b1fbee0bf3ef93.png" alt="E-CELL RIET" className="w-full h-full object-cover rounded-lg" onError={(e) => (e.currentTarget.style.opacity = '0')} />
              </div>
              <div className="flex flex-col">
                <span className="text-sm font-bold text-white tracking-wider leading-tight">E-CELL</span>
@@ -1034,8 +1032,8 @@ export default function LandingPage() {
               />
 
               <div className="relative z-10">
-                <div className="w-24 h-24 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-full mx-auto mb-6 flex items-center justify-center text-3xl font-bold text-white shadow-[0_0_20px_rgba(99,102,241,0.3)] group-hover:scale-110 transition-transform duration-300">
-                  AG
+                <div className="w-24 h-24 rounded-full mx-auto mb-6 flex items-center justify-center text-3xl font-bold text-white shadow-[0_0_20px_rgba(99,102,241,0.3)] group-hover:scale-110 transition-transform duration-300 relative overflow-hidden bg-slate-800">
+                  <img src="https://i.pinimg.com/originals/25/0d/51/250d51aa644ad81810d1d7908838e7f5.jpg" alt="Alok Gupta" className="absolute inset-0 w-full h-full object-cover" />
                 </div>
                 <h3 className="text-2xl font-bold mb-1 text-white">Alok Gupta</h3>
                 <p className="text-indigo-400 font-mono text-sm mb-8 tracking-widest uppercase">Founder</p>
@@ -1199,9 +1197,8 @@ export default function LandingPage() {
         <div className="absolute inset-0 bg-gradient-to-t from-indigo-950/20 to-transparent pointer-events-none"></div>
         <div className="space-y-6 text-sm text-slate-500 relative z-10 flex flex-col items-center">
           <div className="mb-4 flex flex-col items-center">
-            <div className="relative flex items-center justify-center w-16 h-16 rounded-full bg-slate-900 border border-slate-700 overflow-hidden shadow-[0_0_15px_rgba(99,102,241,0.2)] mb-4">
-                <span className="text-sm font-bold text-slate-400">EC</span>
-                <img src="/logo.png" alt="E-CELL RIET Logo" className="absolute inset-0 w-full h-full object-cover z-10" onError={(e) => (e.currentTarget.style.opacity = '0')} />
+            <div className="relative flex items-center justify-center w-16 h-16 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] overflow-hidden p-1.5 mb-4">
+                <img src="https://i.pinimg.com/originals/21/1b/14/211b146f35a794e359b1fbee0bf3ef93.png" alt="E-CELL RIET Logo" className="w-full h-full object-cover rounded-xl" onError={(e) => (e.currentTarget.style.opacity = '0')} />
             </div>
             <p className="font-bold text-white text-2xl tracking-tight mb-2">E-Cell RIET</p>
             <p className="text-slate-400">Rajasthan Institute of Engineering & Technology, Jaipur</p>
