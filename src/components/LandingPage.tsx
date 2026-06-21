@@ -122,6 +122,7 @@ export default function LandingPage() {
   const lenis = useLenis();
   const { scrollY } = useScroll();
   const [navHidden, setNavHidden] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious() ?? 0;
@@ -213,7 +214,7 @@ export default function LandingPage() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: navHidden ? -100 : 0, opacity: navHidden ? 0 : 1 }}
         transition={{ type: "spring", stiffness: 50, damping: 20, mass: 1 }}
-        className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-5xl bg-white/[0.02] backdrop-blur-3xl border border-white/5 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] rounded-full"
+        className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-5xl bg-white/[0.02] backdrop-blur-3xl border border-white/5 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] transition-all duration-300 ${isMobileMenuOpen ? 'rounded-3xl' : 'rounded-full'}`}
       >
         <div className="px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -248,11 +249,46 @@ export default function LandingPage() {
                Apply Now
              </motion.a>
              {/* Mobile Menu Icon Fallback */}
-             <button className="md:hidden text-slate-300 p-2">
-                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+             <button 
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="md:hidden text-slate-300 p-2"
+             >
+                 {isMobileMenuOpen ? (
+                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                 ) : (
+                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                 )}
              </button>
           </div>
         </div>
+
+        {/* Mobile Dropdown */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="md:hidden overflow-hidden border-t border-white/10"
+            >
+              <div className="flex flex-col items-center gap-4 py-6 text-sm font-medium text-slate-300">
+                <a href="#how-it-works" onClick={(e) => { handleSmoothScroll(e, 'how-it-works'); setIsMobileMenuOpen(false); }} className="hover:text-white transition-colors w-full text-center py-2">Program</a>
+                <a href="#voices" onClick={(e) => { handleSmoothScroll(e, 'voices'); setIsMobileMenuOpen(false); }} className="hover:text-white transition-colors w-full text-center py-2">Voices</a>
+                <a href="#contact" onClick={(e) => { handleSmoothScroll(e, 'contact'); setIsMobileMenuOpen(false); }} className="hover:text-white transition-colors w-full text-center py-2">Contact</a>
+                <motion.a 
+                  href={GOOGLE_FORM_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  className="bg-white/10 hover:bg-white/20 border border-white/10 text-white px-8 py-3 mt-2 rounded-full text-sm font-semibold transition-colors"
+                >
+                  Apply Now
+                </motion.a>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.nav>
 
       {/* 1. HERO SECTION */}
@@ -309,7 +345,7 @@ export default function LandingPage() {
           </FadeIn>
           
           <FadeIn delay={0.2}>
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter leading-[0.95] mb-8 text-white">
+            <h1 className="text-5xl md:text-7xl lg:text-9xl font-bold tracking-tighter leading-[1.05] md:leading-[0.95] mb-8 text-white">
               Building RIET’s <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-indigo-200 to-slate-400 animate-gradient-x drop-shadow-sm">
                 First Unicorn.
@@ -721,29 +757,31 @@ export default function LandingPage() {
         
         <div className="max-w-5xl mx-auto w-full">
             {/* Timeline Selection Bar */}
-            <div className="flex flex-col md:flex-row mb-12 relative border border-slate-800 rounded-2xl bg-slate-900/30 overflow-hidden shadow-2xl">
-              {timelineStages.map((stage, idx) => (
-                <button
-                  key={stage.id}
-                  onClick={() => setActiveTimelineStage(idx)}
-                  className={`flex-1 flex items-center justify-center gap-3 p-6 transition-all duration-300 relative border-b md:border-b-0 md:border-r border-slate-800 last:border-none group ${activeTimelineStage === idx ? 'bg-indigo-500/10 text-white' : 'hover:bg-slate-800/50 text-slate-400'}`}
-                >
-                  <div className={`p-2 rounded-lg transition-colors ${activeTimelineStage === idx ? 'bg-indigo-500/20 text-indigo-400' : 'bg-slate-800 group-hover:text-slate-300'}`}>
-                    {stage.icon}
-                  </div>
-                  <div className="text-left w-full max-w-[120px]">
-                    <div className="text-[10px] font-mono text-indigo-400 opacity-80 mb-0.5">{stage.phase}</div>
-                    <div className="font-bold whitespace-nowrap">{stage.title}</div>
-                  </div>
-                  
-                  {activeTimelineStage === idx && (
-                    <motion.div
-                      layoutId="active-stage-indicator"
-                      className="absolute bottom-0 left-0 w-full md:w-auto md:top-0 md:bottom-0 md:left-0 md:w-1 h-1 md:h-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]"
-                    />
-                  )}
-                </button>
-              ))}
+            <div className="flex overflow-x-auto md:overflow-visible mb-12 relative border border-slate-800 rounded-2xl bg-slate-900/30 shadow-2xl snap-x snap-mandatory hide-scrollbar">
+              <div className="flex flex-nowrap w-full min-w-max md:min-w-0">
+                {timelineStages.map((stage, idx) => (
+                  <button
+                    key={stage.id}
+                    onClick={() => setActiveTimelineStage(idx)}
+                    className={`flex-1 flex items-center justify-center gap-3 p-6 transition-all duration-300 relative shrink-0 w-[80vw] md:w-auto border-r border-slate-800 last:border-none group snap-center ${activeTimelineStage === idx ? 'bg-indigo-500/10 text-white' : 'hover:bg-slate-800/50 text-slate-400'}`}
+                  >
+                    <div className={`p-2 rounded-lg transition-colors ${activeTimelineStage === idx ? 'bg-indigo-500/20 text-indigo-400' : 'bg-slate-800 group-hover:text-slate-300'}`}>
+                      {stage.icon}
+                    </div>
+                    <div className="text-left w-full max-w-[120px]">
+                      <div className="text-[10px] font-mono text-indigo-400 opacity-80 mb-0.5">{stage.phase}</div>
+                      <div className="font-bold whitespace-nowrap">{stage.title}</div>
+                    </div>
+                    
+                    {activeTimelineStage === idx && (
+                      <motion.div
+                        layoutId="active-stage-indicator"
+                        className="absolute bottom-0 left-0 w-full h-1 bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]"
+                      />
+                    )}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Timeline Content */}
