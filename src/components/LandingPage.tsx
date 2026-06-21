@@ -818,31 +818,29 @@ export default function LandingPage() {
         
         <div className="max-w-5xl mx-auto w-full">
             {/* Timeline Selection Bar */}
-            <div className="flex overflow-x-auto md:overflow-visible mb-12 relative border border-slate-800 rounded-2xl bg-slate-900/30 shadow-2xl snap-x snap-mandatory hide-scrollbar">
-              <div className="flex flex-nowrap w-full min-w-max md:min-w-0">
-                {timelineStages.map((stage, idx) => (
-                  <button
-                    key={stage.id}
-                    onClick={() => setActiveTimelineStage(idx)}
-                    className={`flex-1 flex items-center justify-center gap-3 p-6 transition-all duration-300 relative shrink-0 w-[80vw] md:w-auto border-r border-slate-800 last:border-none group snap-center ${activeTimelineStage === idx ? 'bg-indigo-500/10 text-white' : 'hover:bg-slate-800/50 text-slate-400'}`}
-                  >
-                    <div className={`p-2 rounded-lg transition-colors ${activeTimelineStage === idx ? 'bg-indigo-500/20 text-indigo-400' : 'bg-slate-800 group-hover:text-slate-300'}`}>
-                      {stage.icon}
-                    </div>
-                    <div className="text-left w-full max-w-[120px]">
-                      <div className="text-[10px] font-mono text-indigo-400 opacity-80 mb-0.5">{stage.phase}</div>
-                      <div className="font-bold whitespace-nowrap">{stage.title}</div>
-                    </div>
-                    
-                    {activeTimelineStage === idx && (
-                      <motion.div
-                        layoutId="active-stage-indicator"
-                        className="absolute bottom-0 left-0 w-full h-1 bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]"
-                      />
-                    )}
-                  </button>
-                ))}
-              </div>
+            <div className="flex flex-col md:flex-row mb-12 relative border border-slate-800 rounded-2xl bg-slate-900/30 overflow-hidden shadow-2xl">
+              {timelineStages.map((stage, idx) => (
+                <button
+                  key={stage.id}
+                  onClick={() => setActiveTimelineStage(idx)}
+                  className={`flex-1 flex items-center justify-center md:justify-start lg:justify-center gap-3 p-4 md:p-6 transition-all duration-300 relative border-b md:border-b-0 md:border-r border-slate-800 last:border-none group ${activeTimelineStage === idx ? 'bg-indigo-500/10 text-white' : 'hover:bg-slate-800/50 text-slate-400'}`}
+                >
+                  <div className={`p-2 rounded-lg transition-colors ${activeTimelineStage === idx ? 'bg-indigo-500/20 text-indigo-400' : 'bg-slate-800 group-hover:text-slate-300'}`}>
+                    {stage.icon}
+                  </div>
+                  <div className="text-left w-full max-w-[120px]">
+                    <div className="text-[10px] font-mono text-indigo-400 opacity-80 mb-0.5">{stage.phase}</div>
+                    <div className="font-bold text-sm md:text-base whitespace-nowrap">{stage.title}</div>
+                  </div>
+                  
+                  {activeTimelineStage === idx && (
+                    <motion.div
+                      layoutId="active-stage-indicator"
+                      className="absolute bottom-0 left-0 w-full md:w-auto md:top-0 md:bottom-0 md:left-0 md:w-1 h-1 md:h-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]"
+                    />
+                  )}
+                </button>
+              ))}
             </div>
 
             {/* Timeline Content */}
