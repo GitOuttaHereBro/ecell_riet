@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
-import { ArrowRight, CheckCircle, Clock, Target, Users, Zap, ChevronRight, ExternalLink, Phone, MessageCircle, Instagram, Quote, Mail, Lightbulb, Globe, User, Calendar, DollarSign, AlertCircle, Linkedin, ChevronDown, Info } from 'lucide-react';
+import { ArrowRight, CheckCircle, Clock, Target, Users, Zap, ChevronRight, ExternalLink, Phone, MessageCircle, Instagram, Quote, Mail, Lightbulb, Globe, User, Calendar, DollarSign, AlertCircle, Linkedin, ChevronDown, Info, TestTube, Hammer, Rocket } from 'lucide-react';
 
 const GOOGLE_FORM_LINK = "https://docs.google.com/forms/d/e/1FAIpQLSdKRM7wXrG_F-mQyrAdKOM6A8FRKgH3ydPtQXiWaf3u01L0JQ/viewform?usp=publish-editor";
 const INSTAGRAM_LINK = "https://www.instagram.com/ecell_riet?igsh=MThvZHdlOThwbXJxeQ==";
@@ -119,6 +119,54 @@ export default function LandingPage() {
   const y1 = useTransform(scrollY, [0, 500], [0, 200]);
   const y2 = useTransform(scrollY, [0, 500], [0, -150]);
   const [hoveredGraphPoint, setHoveredGraphPoint] = useState<number | null>(null);
+  const [activeTimelineStage, setActiveTimelineStage] = useState<number>(0);
+
+  const timelineStages = [
+    {
+      id: "ideation",
+      phase: "01",
+      title: "Ideation",
+      icon: <Lightbulb className="w-5 h-5" />,
+      milestones: [
+        { title: "Problem Discovery", desc: "Identify and define a real, painful problem worth solving." },
+        { title: "User Interviews", desc: "Talk to potential users to validate the problem's existence." },
+        { title: "Solution Thesis", desc: "Formulate a hypothesis on how you will solve this problem uniquely." },
+      ]
+    },
+    {
+      id: "validation",
+      phase: "02",
+      title: "Validation",
+      icon: <TestTube className="w-5 h-5" />,
+      milestones: [
+        { title: "MVP Creation", desc: "Build the simplest possible version to test your hypothesis." },
+        { title: "Initial Launch", desc: "Put the product in the hands of early adopters." },
+        { title: "Feedback Loop", desc: "Gather data, measure usage, and ruthlessly iterate." },
+      ]
+    },
+    {
+      id: "building",
+      phase: "03",
+      title: "Building",
+      icon: <Hammer className="w-5 h-5" />,
+      milestones: [
+        { title: "Core Architecture", desc: "Solidify the product's foundations for scale and stability." },
+        { title: "Mentorship", desc: "Work with advisors to refine business models and operations." },
+        { title: "Growth Engine", desc: "Identify reproducible channels for user acquisition." },
+      ]
+    },
+    {
+      id: "execution",
+      phase: "04",
+      title: "Execution",
+      icon: <Rocket className="w-5 h-5" />,
+      milestones: [
+        { title: "Demo Day", desc: "Present traction and vision to a panel of experts and investors." },
+        { title: "Market Launch", desc: "Go to market with a comprehensive scaling strategy." },
+        { title: "Traction", desc: "Achieve asymmetric advantage and dominate the identified niche." },
+      ]
+    }
+  ];
 
   const graphPoints = [
     { x: 50, y: 260, label: "Day 1", desc: "The Idea Phase. Excitement is high, but validation is zero." },
@@ -463,8 +511,8 @@ export default function LandingPage() {
                       {/* Advantage Label with Tooltip */}
                       <g className="group/tooltip">
                         <motion.text
-                          x="346" y="130"
-                          transform="rotate(-90 346 130)"
+                          x="372" y="130"
+                          transform="rotate(-90 372 130)"
                           textAnchor="middle"
                           fill="#818cf8"
                           fontSize="9"
@@ -478,13 +526,13 @@ export default function LandingPage() {
                           Asymmetric Advantage
                         </motion.text>
                         {/* Hit area */}
-                        <rect x="336" y="85" width="20" height="90" fill="transparent" className="cursor-help" />
+                        <rect x="364" y="85" width="20" height="90" fill="transparent" className="cursor-help" />
                         
-                        <foreignObject x="110" y="40" width="220" height="100" className="opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-300 pointer-events-none z-50">
+                        <foreignObject x="140" y="40" width="200" height="100" className="opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-300 pointer-events-none z-50">
                           <div xmlns="http://www.w3.org/1999/xhtml" className="w-full h-full flex items-end justify-end pb-2">
                              <div className="bg-slate-800 border border-slate-700 rounded-lg p-3 text-[10px] leading-tight text-slate-300 shadow-xl text-center w-full relative">
                                 Early execution creates a compounding lead that credentials alone cannot match.
-                                <div className="absolute top-full right-8 -mt-1 border-4 border-transparent border-t-slate-800"></div>
+                                <div className="absolute top-full right-6 -mt-1 border-4 border-transparent border-t-slate-800"></div>
                              </div>
                           </div>
                         </foreignObject>
@@ -549,10 +597,10 @@ export default function LandingPage() {
                       <AnimatePresence>
                         {hoveredGraphPoint !== null && (
                           <foreignObject 
-                            x={graphPoints[hoveredGraphPoint].x > 300 ? graphPoints[hoveredGraphPoint].x - 180 : graphPoints[hoveredGraphPoint].x - 100} 
-                            y={graphPoints[hoveredGraphPoint].y - 100} 
-                            width="200" 
-                            height="100" 
+                            x={graphPoints[hoveredGraphPoint].x > 300 ? graphPoints[hoveredGraphPoint].x - 220 : graphPoints[hoveredGraphPoint].x - 110} 
+                            y={graphPoints[hoveredGraphPoint].y - 110} 
+                            width="240" 
+                            height="110" 
                             className="pointer-events-none overflow-visible"
                           >
                             <div xmlns="http://www.w3.org/1999/xhtml" className="flex flex-col items-center justify-end h-full pb-4 relative">
@@ -560,9 +608,9 @@ export default function LandingPage() {
                                 initial={{ opacity: 0, y: 10, scale: 0.9 }}
                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                 exit={{ opacity: 0, y: 10, scale: 0.9 }}
-                                className="bg-slate-900/90 backdrop-blur-md border border-slate-700 p-3 rounded-xl shadow-2xl text-center min-w-[180px] w-full"
+                                className="bg-slate-900/90 backdrop-blur-md border border-slate-700 p-3 rounded-xl shadow-2xl text-center min-w-[200px] w-[200px]"
                               >
-                                <h4 className={`text-xs font-bold uppercase tracking-wider mb-1 ${hoveredGraphPoint === 1 ? 'text-red-400' : 'text-indigo-400'}`}>
+                                <h4 className={`text-[11px] font-bold uppercase tracking-wider mb-1 ${hoveredGraphPoint === 1 ? 'text-red-400' : 'text-indigo-400'}`}>
                                   {graphPoints[hoveredGraphPoint].label}
                                 </h4>
                                 <p className="text-[10px] text-slate-300 leading-tight">
@@ -598,84 +646,61 @@ export default function LandingPage() {
       <Section id="how-it-works">
         <SectionTitle className="text-4xl md:text-5xl font-bold tracking-tight mb-20 text-center">From Idea to Execution</SectionTitle>
         
-        <div className="relative">
-          {/* Connecting Line Container */}
-          <div className="absolute left-[28px] md:left-1/2 top-0 bottom-0 w-px md:-translate-x-1/2 h-full bg-indigo-500/10">
-            {/* Scroll Progress Line */}
-            <motion.div
-              className="absolute top-0 left-0 w-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]"
-              initial={{ height: 0 }}
-              whileInView={{ height: "100%" }}
-              viewport={{ once: true, amount: 0.1 }}
-              transition={{ duration: 4, ease: "linear" }}
-            />
-          </div>
-
-          <div className="space-y-12">
-            {[
-              { phase: "01", title: "Problem Discovery", desc: "Students validate real problems through structured user interviews." },
-              { phase: "02", title: "Validation Sprint", desc: "Build and test an MVP with real users." },
-              { phase: "03", title: "Mentorship", desc: "Weekly reviews and strategic refinement." },
-              { phase: "04", title: "Demo Day", desc: "Present progress to faculty and external mentors." },
-              { phase: "05", title: "Advanced Track", desc: "Top teams continue toward traction and growth." },
-              { 
-                phase: "Outcome", 
-                title: "Real Results", 
-                desc: (
-                  <>
-                    <span className="group/tooltip relative cursor-help border-b border-dashed border-slate-500 hover:border-indigo-400 hover:text-indigo-300 transition-colors inline-block">
-                      Market-validated product
-                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-slate-800 border border-slate-700 rounded-lg text-xs text-slate-300 shadow-xl opacity-0 group-hover/tooltip:opacity-100 transition-opacity pointer-events-none z-20 text-center">
-                        A product that real customers are willing to pay for or use repeatedly.
-                        <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-800"></div>
-                      </div>
-                    </span>
-                    . Real user traction. Investment readiness.
-                  </>
-                )
-              }
-            ].map((step, i) => (
-              <div key={step.phase} className={`flex flex-col md:flex-row gap-8 items-start md:items-center ${i % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
-                
-                {/* Content */}
-                <div className="flex-1 w-full md:w-auto pl-16 md:pl-0">
-                  <motion.div 
-                    initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, margin: "-100px" }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    whileHover={{ scale: 1.02, backgroundColor: "rgba(30, 41, 59, 0.8)" }}
-                    className={`p-8 rounded-2xl border border-slate-800 bg-slate-900/50 backdrop-blur-sm transition-all duration-300 group ${i % 2 === 0 ? 'md:text-left' : 'md:text-right'}`}
-                  >
-                    <h3 className="text-2xl font-bold mb-2 text-white group-hover:text-indigo-300 transition-colors">{step.title}</h3>
-                    <div className="text-slate-400 leading-relaxed">{step.desc}</div>
-                  </motion.div>
-                </div>
-
-                {/* Center Marker */}
-                <div className="absolute left-[4px] md:left-1/2 w-12 h-12 -translate-x-0 md:-translate-x-1/2 flex items-center justify-center">
-                  <motion.div 
-                    initial={{ scale: 0, opacity: 0 }}
-                    whileInView={{ scale: 1, opacity: 1 }}
-                    viewport={{ once: true, margin: "-100px" }}
-                    transition={{ duration: 0.4, delay: 0 }}
-                    className="w-12 h-12 rounded-full bg-[#020617] border border-indigo-500/50 flex items-center justify-center z-10 shadow-[0_0_15px_rgba(99,102,241,0.3)] relative"
-                  >
+        <div className="max-w-5xl mx-auto w-full">
+            {/* Timeline Selection Bar */}
+            <div className="flex flex-col md:flex-row mb-12 relative border border-slate-800 rounded-2xl bg-slate-900/30 overflow-hidden shadow-2xl">
+              {timelineStages.map((stage, idx) => (
+                <button
+                  key={stage.id}
+                  onClick={() => setActiveTimelineStage(idx)}
+                  className={`flex-1 flex items-center justify-center gap-3 p-6 transition-all duration-300 relative border-b md:border-b-0 md:border-r border-slate-800 last:border-none group ${activeTimelineStage === idx ? 'bg-indigo-500/10 text-white' : 'hover:bg-slate-800/50 text-slate-400'}`}
+                >
+                  <div className={`p-2 rounded-lg transition-colors ${activeTimelineStage === idx ? 'bg-indigo-500/20 text-indigo-400' : 'bg-slate-800 group-hover:text-slate-300'}`}>
+                    {stage.icon}
+                  </div>
+                  <div className="text-left w-full max-w-[120px]">
+                    <div className="text-[10px] font-mono text-indigo-400 opacity-80 mb-0.5">{stage.phase}</div>
+                    <div className="font-bold whitespace-nowrap">{stage.title}</div>
+                  </div>
+                  
+                  {activeTimelineStage === idx && (
                     <motion.div
-                      className="absolute inset-0 rounded-full border border-indigo-400/30"
-                      animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
-                      transition={{ duration: 2, repeat: Infinity, delay: i * 0.5 }}
+                      layoutId="active-stage-indicator"
+                      className="absolute bottom-0 left-0 w-full md:w-auto md:top-0 md:bottom-0 md:left-0 md:w-1 h-1 md:h-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]"
                     />
-                    <span className="text-xs font-mono font-bold text-indigo-400 relative z-10">{step.phase}</span>
-                  </motion.div>
-                </div>
+                  )}
+                </button>
+              ))}
+            </div>
 
-                {/* Empty Space for alignment */}
-                <div className="flex-1 hidden md:block"></div>
-              </div>
-            ))}
-          </div>
-        </div>
+            {/* Timeline Content */}
+            <div className="relative overflow-hidden min-h-[250px]">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeTimelineStage}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  className="grid md:grid-cols-3 gap-6"
+                >
+                  {timelineStages[activeTimelineStage].milestones.map((milestone, idx) => (
+                    <div key={idx} className="bg-slate-900/40 border border-slate-800 rounded-2xl p-8 backdrop-blur-sm shadow-xl hover:border-indigo-500/30 hover:bg-slate-800/60 transition-all group">
+                      <div className="w-10 h-10 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center font-mono text-xs font-bold mb-6 group-hover:bg-indigo-500/20 group-hover:text-indigo-300 transition-colors">
+                        {idx + 1}
+                      </div>
+                      <h4 className="text-xl font-bold text-white mb-3">
+                        {milestone.title}
+                      </h4>
+                      <p className="text-slate-400 text-sm leading-relaxed">
+                        {milestone.desc}
+                      </p>
+                    </div>
+                  ))}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+         </div>
       </Section>
 
       {/* 4. WHO SHOULD APPLY */}
