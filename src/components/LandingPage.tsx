@@ -63,16 +63,21 @@ const FAQItem: React.FC<FAQItemProps> = ({ faq, index }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <FadeIn delay={index * 0.1}>
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+    >
       <motion.div 
         layout
         transition={{ layout: { duration: 0.3, ease: "easeInOut" }, type: "spring", stiffness: 300, damping: 20 }}
         onClick={() => setIsOpen(!isOpen)}
         whileHover={{ y: -5, borderColor: "rgba(99, 102, 241, 0.5)" }}
-        className={`bg-slate-900/40 p-8 rounded-2xl border ${isOpen ? 'border-indigo-500/50 bg-slate-800/40' : 'border-slate-800'} transition-colors duration-300 cursor-pointer overflow-hidden relative`}
+        className={`bg-slate-900/40 p-8 rounded-2xl border ${isOpen ? 'border-indigo-500/50 bg-slate-800/40' : 'border-slate-800'} transition-all duration-300 cursor-pointer overflow-hidden relative group`}
       >
         <motion.div layout="position" className="flex items-start gap-4 mb-3 relative z-10">
-          <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400 shrink-0">
+          <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400 shrink-0 group-hover:scale-110 transition-transform">
             <motion.div
               animate={{ scale: [1, 1.15, 1], opacity: [0.8, 1, 0.8] }}
               transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: index * 0.2 }}
@@ -80,7 +85,7 @@ const FAQItem: React.FC<FAQItemProps> = ({ faq, index }) => {
               <faq.icon className="w-5 h-5" />
             </motion.div>
           </div>
-          <h3 className={`text-lg font-bold pt-1 flex-1 transition-colors ${isOpen ? 'text-indigo-300' : 'text-indigo-200'}`}>{faq.q}</h3>
+          <h3 className={`text-lg font-bold pt-1 flex-1 transition-colors ${isOpen ? 'text-indigo-300' : 'text-indigo-200 group-hover:text-white'}`}>{faq.q}</h3>
           <motion.div
             animate={{ rotate: isOpen ? 180 : 0 }}
             transition={{ duration: 0.3 }}
@@ -104,7 +109,7 @@ const FAQItem: React.FC<FAQItemProps> = ({ faq, index }) => {
           )}
         </AnimatePresence>
       </motion.div>
-    </FadeIn>
+    </motion.div>
   );
 };
 
@@ -249,30 +254,54 @@ export default function LandingPage() {
       
       {/* NAVBAR */}
       <motion.nav 
-        initial={{ y: -100, x: "-50%", opacity: 0 }}
-        animate={{ y: navHidden ? -100 : 0, x: "-50%", opacity: navHidden ? 0 : 1 }}
-        transition={{ duration: 0.5, ease: "easeInOut" }}
-        className="fixed top-6 left-1/2 z-40 w-[90%] max-w-5xl bg-white/[0.02] backdrop-blur-md border border-white/5 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] rounded-full"
+        initial={{ y: -100, x: "-50%", opacity: 0, scale: 0.9 }}
+        animate={{ y: navHidden ? -100 : 0, x: "-50%", opacity: navHidden ? 0 : 1, scale: navHidden ? 0.9 : 1 }}
+        transition={{ type: "spring", stiffness: 200, damping: 20, mass: 1 }}
+        className="fixed top-6 left-1/2 z-40 w-[90%] max-w-5xl bg-white/[0.02] backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] rounded-full"
       >
         <div className="px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
              <motion.div 
-               whileHover={{ rotate: 180 }}
-               transition={{ duration: 0.6, type: "spring" }}
+               initial={{ scale: 0, rotate: -180 }}
+               animate={{ scale: 1, rotate: 0 }}
+               whileHover={{ rotate: 180, scale: 1.1 }}
+               transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.1 }}
                className="relative flex items-center justify-center w-10 h-10 rounded-full overflow-hidden"
              >
                 <img src="https://i.pinimg.com/originals/21/1b/14/211b146f35a794e359b1fbee0bf3ef93.png" alt="E-CELL RIET" className="w-full h-full object-cover" onError={(e) => (e.currentTarget.style.opacity = '0')} />
              </motion.div>
-             <div className="flex flex-col">
+             <motion.div 
+               initial={{ opacity: 0, x: -10 }}
+               animate={{ opacity: 1, x: 0 }}
+               transition={{ duration: 0.5, delay: 0.2 }}
+               className="flex flex-col"
+             >
                <span className="text-sm font-bold text-white tracking-wider leading-tight">E-CELL</span>
                <span className="text-[10px] text-zinc-400 font-mono tracking-widest uppercase">Riet</span>
-             </div>
+             </motion.div>
           </div>
           
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
-             <a href="#how-it-works" onClick={(e) => handleSmoothScroll(e, 'how-it-works')} className="hover:text-white transition-colors">Program</a>
-             <a href="#voices" onClick={(e) => handleSmoothScroll(e, 'voices')} className="hover:text-white transition-colors">Voices</a>
-             <a href="#contact" onClick={(e) => handleSmoothScroll(e, 'contact')} className="hover:text-white transition-colors">Contact</a>
+          <div className="hidden md:flex items-center gap-2 text-sm font-medium text-slate-300">
+             {[
+               { name: 'Program', id: 'how-it-works' },
+               { name: 'Voices', id: 'voices' },
+               { name: 'Contact', id: 'contact' }
+             ].map((item, idx) => (
+                 <motion.a 
+                   key={item.name}
+                   href={`#${item.id}`} 
+                   onClick={(e) => handleSmoothScroll(e, item.id)} 
+                   initial={{ opacity: 0, y: -10 }}
+                   animate={{ opacity: 1, y: 0 }}
+                   transition={{ duration: 0.5, delay: 0.2 + idx * 0.1, type: "spring", stiffness: 300, damping: 20 }}
+                   whileHover={{ scale: 1.05, color: "#fff" }}
+                   whileTap={{ scale: 0.95 }}
+                   className="px-4 py-2 rounded-full hover:bg-white/5 transition-colors relative group"
+                 >
+                    {item.name}
+                    <span className="absolute inset-x-0 bottom-0 h-[2px] bg-indigo-500 scale-x-0 group-hover:scale-x-50 transition-transform origin-center rounded-full opacity-0 group-hover:opacity-100" />
+                 </motion.a>
+             ))}
           </div>
 
           <div className="flex flex-row items-center gap-4">
@@ -280,9 +309,12 @@ export default function LandingPage() {
                href={GOOGLE_FORM_LINK}
                target="_blank"
                rel="noopener noreferrer"
-               whileHover={{ scale: 1.05 }}
-               whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}
-               className="relative overflow-hidden group bg-white/10 hover:bg-white/20 border border-white/10 text-white px-5 py-2 rounded-full text-sm font-semibold transition-all shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:shadow-[0_0_25px_rgba(255,255,255,0.1)] hidden sm:flex"
+               initial={{ opacity: 0, scale: 0.8 }}
+               animate={{ opacity: 1, scale: 1 }}
+               transition={{ duration: 0.5, delay: 0.5, type: "spring", stiffness: 300, damping: 20 }}
+               whileHover={{ scale: 1.05, boxShadow: "0 0 25px rgba(255,255,255,0.2)" }}
+               whileTap={{ scale: 0.95 }}
+               className="relative overflow-hidden group bg-white/10 hover:bg-white/20 border border-white/10 text-white px-6 py-2 rounded-full text-sm font-semibold transition-all shadow-[0_0_15px_rgba(255,255,255,0.05)] hidden sm:flex items-center justify-center"
              >
                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer" />
                <span className="relative">Apply Now</span>
@@ -407,43 +439,62 @@ export default function LandingPage() {
             </div>
           </FadeIn>
           
-          <FadeIn delay={0.2}>
-            <h1 className="text-5xl md:text-7xl lg:text-9xl font-bold tracking-tighter leading-[1.05] md:leading-[0.95] mb-8 text-white">
-              Building RIET’s <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-indigo-200 to-slate-400 animate-gradient-x drop-shadow-sm">
-                First Unicorn.
+          <div className="mb-8 relative z-10">
+            <h1 className="text-5xl md:text-7xl lg:text-9xl font-bold tracking-tighter leading-[1.05] md:leading-[0.95] text-white flex flex-col" style={{ perspective: "1000px" }}>
+              <span className="overflow-hidden inline-block pb-2 -ml-2">
+                <motion.span
+                  initial={{ y: 150, opacity: 0, rotateX: 25, scale: 0.9 }}
+                  animate={{ y: 0, opacity: 1, rotateX: 0, scale: 1 }}
+                  transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.1 }}
+                  className="inline-block origin-bottom px-2"
+                >
+                  Building RIET’s
+                </motion.span>
+              </span>
+              <span className="overflow-hidden inline-block pb-4 -ml-2">
+                <motion.span
+                  initial={{ y: 150, opacity: 0, rotateX: -25, scale: 0.9 }}
+                  animate={{ y: 0, opacity: 1, rotateX: 0, scale: 1 }}
+                  transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.25 }}
+                  className="inline-block px-2"
+                >
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-indigo-300 to-slate-400 drop-shadow-[0_0_25px_rgba(165,180,252,0.3)] pointer-events-none">
+                    First Unicorn.
+                  </span>
+                </motion.span>
               </span>
             </h1>
-          </FadeIn>
+          </div>
           
-          <FadeIn delay={0.3}>
+          <FadeIn delay={0.4}>
             <p className="text-xl md:text-2xl max-w-3xl font-light text-slate-300 mb-8 tracking-wide italic">
               "Great companies don’t start with funding. They start with disciplined builders."
             </p>
           </FadeIn>
           
-          <FadeIn delay={0.4}>
-            <p className="text-lg text-slate-500 max-w-xl mb-12 leading-relaxed border-l-2 border-indigo-500/30 pl-6">
+          <FadeIn delay={0.5}>
+            <p className="text-lg text-slate-500 max-w-xl mb-12 leading-relaxed border-l-2 border-indigo-500/50 pl-6 shadow-[inset_2px_0_10px_rgba(99,102,241,0.1)]">
               A disciplined system to turn ideas into execution-ready startups. 
               Join the movement to build the future.
             </p>
           </FadeIn>
           
-          <FadeIn delay={0.5}>
+          <FadeIn delay={0.6}>
             <div className="flex flex-col sm:flex-row gap-4">
               <motion.a 
                 href={GOOGLE_FORM_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                className="relative overflow-hidden group inline-flex items-center justify-center gap-3 bg-white text-[#030712] px-8 py-4 rounded-full text-lg font-bold hover:bg-slate-200 transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:shadow-[0_0_50px_rgba(255,255,255,0.4)]"
+                whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(255,255,255,0.4)" }}
+                whileTap={{ scale: 0.95 }} 
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                className="relative overflow-hidden group inline-flex items-center justify-center gap-3 bg-white text-[#030712] px-8 py-4 rounded-full text-lg font-bold hover:bg-slate-200 transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.2)]"
               >
-                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-[#030712]/10 to-transparent -translate-x-full group-hover:animate-shimmer" />
+                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-[#030712]/15 to-transparent -translate-x-full group-hover:animate-shimmer" />
                 <span className="relative">Join E-cell</span>
                 <motion.div
                   className="relative"
-                  animate={{ x: [0, 3, 0], y: [0, -3, 0] }}
+                  animate={{ x: [0, 4, 0], y: [0, -4, 0] }}
                   transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                 >
                   <ExternalLink className="w-5 h-5" />
@@ -452,9 +503,10 @@ export default function LandingPage() {
               <motion.a 
                 href="#how-it-works"
                 onClick={(e) => handleSmoothScroll(e, 'how-it-works')}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full text-lg font-medium text-slate-300 bg-slate-900/50 backdrop-blur-md hover:text-white hover:bg-slate-800 transition-all border border-slate-700 hover:border-slate-500 shadow-xl"
+                whileHover={{ scale: 1.05, backgroundColor: "rgba(30, 41, 59, 0.8)", borderColor: "rgba(148, 163, 184, 0.8)" }}
+                whileTap={{ scale: 0.95 }} 
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full text-lg font-medium text-slate-300 bg-slate-900/40 backdrop-blur-md hover:text-white transition-all border border-slate-700 shadow-xl"
               >
                 Explore the Program
               </motion.a>
@@ -855,25 +907,28 @@ export default function LandingPage() {
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -15 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  transition={{ duration: 0.4, ease: "easeOut", staggerChildren: 0.1 }}
                   className="grid md:grid-cols-3 gap-6"
                 >
                   {timelineStages[activeTimelineStage].milestones.map((milestone, idx) => (
-                    <FadeIn 
-                      key={idx} 
-                      delay={idx * 0.1}
-                      className="bg-slate-900/40 border border-slate-800 rounded-2xl p-8 backdrop-blur-sm shadow-xl hover:border-indigo-500/30 hover:bg-slate-800/60 transition-all group hover:-translate-y-2 hover:shadow-indigo-500/10"
+                    <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: idx * 0.1 }}
                     >
-                      <div className="w-10 h-10 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center font-mono text-xs font-bold mb-6 group-hover:bg-indigo-500/20 group-hover:text-indigo-300 transition-colors">
-                        {idx + 1}
+                      <div className="bg-slate-900/40 border border-slate-800 rounded-2xl p-8 backdrop-blur-sm shadow-xl hover:border-indigo-500/30 hover:bg-slate-800/60 transition-all duration-300 group hover:-translate-y-2 hover:shadow-indigo-500/10 h-full">
+                        <div className="w-10 h-10 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center font-mono text-xs font-bold mb-6 group-hover:bg-indigo-500/20 group-hover:text-indigo-300 transition-colors">
+                          {idx + 1}
+                        </div>
+                        <h4 className="text-xl font-bold text-white mb-3">
+                          {milestone.title}
+                        </h4>
+                        <p className="text-slate-400 text-sm leading-relaxed">
+                          {milestone.desc}
+                        </p>
                       </div>
-                      <h4 className="text-xl font-bold text-white mb-3">
-                        {milestone.title}
-                      </h4>
-                      <p className="text-slate-400 text-sm leading-relaxed">
-                        {milestone.desc}
-                      </p>
-                    </FadeIn>
+                    </motion.div>
                   ))}
                 </motion.div>
               </AnimatePresence>
@@ -953,25 +1008,37 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={{
+            visible: { transition: { staggerChildren: 0.1 } },
+            hidden: {}
+          }}
+          className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
+        >
           {[
             { title: "Weekly Reviews", desc: "Mandatory milestone check-ins." },
             { title: "Progress Tracking", desc: "Transparent logging of all activities." },
             { title: "Performance Based", desc: "Continuation depends on execution." },
             { title: "Active Status", desc: "Inactive teams may be removed." }
           ].map((item, i) => (
-            <FadeIn key={i} delay={i * 0.1}>
-              <motion.div 
-                whileHover={{ y: -8, borderColor: "rgba(99, 102, 241, 0.5)" }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="bg-slate-900/40 p-8 rounded-2xl border border-slate-800 h-full transition-all duration-300 group"
-              >
-                <h3 className="font-bold text-lg mb-3 text-white group-hover:text-indigo-300 transition-colors">{item.title}</h3>
-                <p className="text-slate-400 leading-relaxed">{item.desc}</p>
-              </motion.div>
-            </FadeIn>
+            <motion.div 
+              key={i} 
+              variants={{
+                hidden: { opacity: 0, scale: 0.9, y: 20 },
+                visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+              }}
+              whileHover={{ y: -8, scale: 1.05, borderColor: "rgba(99, 102, 241, 0.5)" }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="bg-slate-900/40 p-8 rounded-2xl border border-slate-800 h-full transition-all duration-300 group hover:shadow-[0_0_20px_rgba(99,102,241,0.15)] hover:bg-slate-800/40"
+            >
+              <h3 className="font-bold text-lg mb-3 text-white group-hover:text-indigo-300 transition-colors">{item.title}</h3>
+              <p className="text-slate-400 leading-relaxed">{item.desc}</p>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </Section>
 
       {/* 5.5 OPERATING PRINCIPLES */}
@@ -983,28 +1050,39 @@ export default function LandingPage() {
               <p className="text-slate-400">The mindset that separates builders from dreamers.</p>
             </FadeIn>
           </div>
-          <FadeIn delay={0.4}>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { title: "Execution over Excitement", desc: "Ideas are cheap. Execution is everything." },
-                { title: "Validation before Scaling", desc: "Don't build what nobody wants." },
-                { title: "Accountability over Attendance", desc: "Show up with progress, not just presence." },
-                { title: "Long-term over Short-term", desc: "Build for the decade, not the weekend." }
-              ].map((principle, i) => (
-                <motion.div 
-                  key={i} 
-                  whileHover={{ scale: 1.03 }}
-                  className="p-6 rounded-xl bg-slate-950 border border-slate-800 hover:border-indigo-500/40 transition-colors"
-                >
-                  <div className="w-10 h-10 rounded-lg bg-indigo-500/10 flex items-center justify-center mb-4 text-indigo-400 font-bold text-lg">
-                    {i + 1}
-                  </div>
-                  <h3 className="text-lg font-bold text-white mb-2">{principle.title}</h3>
-                  <p className="text-sm text-slate-400">{principle.desc}</p>
-                </motion.div>
-              ))}
-            </div>
-          </FadeIn>
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={{
+              visible: { transition: { staggerChildren: 0.1 } },
+              hidden: {}
+            }}
+            className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
+          >
+            {[
+              { title: "Execution over Excitement", desc: "Ideas are cheap. Execution is everything." },
+              { title: "Validation before Scaling", desc: "Don't build what nobody wants." },
+              { title: "Accountability over Attendance", desc: "Show up with progress, not just presence." },
+              { title: "Long-term over Short-term", desc: "Build for the decade, not the weekend." }
+            ].map((principle, i) => (
+              <motion.div 
+                variants={{
+                  hidden: { opacity: 0, scale: 0.9, y: 20 },
+                  visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+                }}
+                key={i} 
+                whileHover={{ scale: 1.05, y: -5 }}
+                className="p-6 rounded-xl bg-slate-950/80 backdrop-blur-sm border border-slate-800 hover:border-indigo-500/50 hover:shadow-[0_0_20px_rgba(99,102,241,0.2)] transition-all duration-300 group"
+              >
+                <div className="w-10 h-10 rounded-lg bg-indigo-500/10 flex items-center justify-center mb-4 text-indigo-400 font-bold text-lg group-hover:bg-indigo-500/20 group-hover:scale-110 transition-transform">
+                  {i + 1}
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-indigo-300 transition-colors">{principle.title}</h3>
+                <p className="text-sm text-slate-400">{principle.desc}</p>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </Section>
 
@@ -1043,17 +1121,21 @@ export default function LandingPage() {
             }
           ].map((item, i) => (
             <FadeIn key={i} delay={i * 0.1}>
-              <div className="bg-slate-900/40 border border-slate-800 p-8 rounded-2xl relative h-full hover:bg-slate-800/60 transition-colors flex flex-col">
+              <motion.div 
+                whileHover={{ y: -10, scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="bg-slate-900/40 border border-slate-800 p-8 rounded-2xl relative h-full hover:bg-slate-800/60 transition-colors flex flex-col group"
+              >
                 <motion.div 
                   className="absolute top-6 right-6"
-                  animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.3, 0.2] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.4, 0.2] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }}
                 >
-                  <Quote className="w-10 h-10 text-indigo-500" />
+                  <Quote className="w-10 h-10 text-indigo-500 group-hover:text-indigo-400 transition-colors" />
                 </motion.div>
                 <p className="text-slate-300 mb-8 leading-relaxed relative z-10 flex-grow italic">"{item.quote}"</p>
                 <div className="flex items-center gap-3 pt-4 border-t border-white/5">
-                  <div className="w-8 h-8 rounded-full bg-indigo-900/30 border border-indigo-500/30 flex items-center justify-center text-indigo-300 font-bold text-xs shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-indigo-900/30 border border-indigo-500/30 flex items-center justify-center text-indigo-300 font-bold text-xs shrink-0 group-hover:scale-110 group-hover:bg-indigo-500/30 transition-all">
                     {item.initials}
                   </div>
                   <div>
@@ -1061,7 +1143,7 @@ export default function LandingPage() {
                     <p className="text-[10px] text-indigo-400 uppercase tracking-wider">{item.role}</p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </FadeIn>
           ))}
         </div>
