@@ -190,7 +190,7 @@ export default function LandingPage() {
     <div className="min-h-screen bg-[#030712] text-slate-200 font-sans selection:bg-indigo-500/30 selection:text-indigo-200 overflow-x-hidden !scroll-smooth">
       
       {/* 1. HERO SECTION */}
-      <header className="relative min-h-screen flex flex-col justify-center px-6 md:px-12 max-w-7xl mx-auto">
+      <header className="relative min-h-screen flex flex-col justify-center">
         {/* Immersive Background */}
         <div className="absolute inset-0 -z-10 overflow-hidden">
           <motion.div style={{ y: y1 }} className="absolute inset-0 will-change-transform">
@@ -214,7 +214,8 @@ export default function LandingPage() {
           <InteractiveParticles />
         </div>
 
-        <FadeIn>
+        <div className="px-6 md:px-12 max-w-7xl mx-auto w-full z-10 relative">
+          <FadeIn>
           <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-slate-900/50 border border-slate-700/50 backdrop-blur-md text-indigo-300 text-xs font-mono tracking-widest mb-8 shadow-2xl shadow-indigo-900/20 transition-all duration-500 hover:bg-slate-800/80 hover:border-indigo-500/40 hover:shadow-indigo-500/10 cursor-default">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
@@ -267,6 +268,7 @@ export default function LandingPage() {
             </motion.a>
           </div>
         </FadeIn>
+        </div>
       </header>
 
       {/* 2. OUR MISSION */}
