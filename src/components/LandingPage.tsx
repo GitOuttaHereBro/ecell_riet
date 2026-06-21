@@ -51,7 +51,7 @@ const FAQItem: React.FC<FAQItemProps> = ({ faq, index }) => {
     <FadeIn delay={index * 0.1}>
       <motion.div 
         layout
-        transition={{ layout: { duration: 0.3, ease: "easeInOut" } }}
+        transition={{ layout: { duration: 0.3, ease: "easeInOut" }, type: "spring", stiffness: 300, damping: 20 }}
         onClick={() => setIsOpen(!isOpen)}
         whileHover={{ y: -5, borderColor: "rgba(99, 102, 241, 0.5)" }}
         className={`bg-slate-900/40 p-8 rounded-2xl border ${isOpen ? 'border-indigo-500/50 bg-slate-800/40' : 'border-slate-800'} transition-colors duration-300 cursor-pointer overflow-hidden relative`}
@@ -242,7 +242,7 @@ export default function LandingPage() {
                target="_blank"
                rel="noopener noreferrer"
                whileHover={{ scale: 1.05 }}
-               whileTap={{ scale: 0.95 }}
+               whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}
                className="bg-white/10 hover:bg-white/20 border border-white/10 text-white px-5 py-2 rounded-full text-sm font-semibold transition-colors hidden sm:flex"
              >
                Apply Now
@@ -337,7 +337,7 @@ export default function LandingPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}
                 className="group inline-flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-600 to-blue-700 text-white px-8 py-4 rounded-full text-lg font-bold hover:from-indigo-500 hover:to-blue-600 transition-all duration-300 shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_30px_rgba(79,70,229,0.6)] border border-white/10"
               >
                 Join E-cell
@@ -352,7 +352,7 @@ export default function LandingPage() {
                 href="#how-it-works"
                 onClick={(e) => handleSmoothScroll(e, 'how-it-works')}
                 whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}
                 className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full text-lg font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all border border-slate-700 hover:border-slate-500"
               >
                 Explore the Program
@@ -865,6 +865,7 @@ export default function LandingPage() {
             <FadeIn key={i} delay={i * 0.1}>
               <motion.div 
                 whileHover={{ y: -8, borderColor: "rgba(99, 102, 241, 0.5)" }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 className="bg-slate-900/40 p-8 rounded-2xl border border-slate-800 h-full transition-all duration-300 group"
               >
                 <h3 className="font-bold text-lg mb-3 text-white group-hover:text-indigo-300 transition-colors">{item.title}</h3>
@@ -1029,7 +1030,7 @@ export default function LandingPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}
                 className="inline-flex items-center gap-3 bg-gradient-to-r from-indigo-600 to-blue-700 text-white px-10 py-5 rounded-full text-xl font-bold hover:from-indigo-500 hover:to-blue-600 transition-all duration-300 shadow-[0_0_30px_rgba(79,70,229,0.4)] hover:shadow-[0_0_40px_rgba(79,70,229,0.6)] border border-white/10"
               >
                 JOIN NOW
@@ -1078,7 +1079,7 @@ export default function LandingPage() {
           {/* Founder 1 */}
           <FadeIn delay={0.1}>
             <motion.div 
-              whileHover={{ y: -10 }}
+              whileHover={{ y: -10 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}
               className="bg-gradient-to-b from-white/[0.05] to-transparent p-10 rounded-3xl border border-white/10 hover:border-indigo-500/50 transition-colors duration-300 text-center group relative overflow-hidden h-full"
             >
               <div className="absolute inset-0 bg-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -1103,7 +1104,7 @@ export default function LandingPage() {
                 
                 <div className="flex flex-col gap-4 items-center">
                   <a href="tel:9451901542" className="flex items-center gap-3 text-slate-300 hover:text-white transition-colors px-4 py-2 rounded-lg hover:bg-white/5 w-full justify-center group">
-                    <motion.div whileHover={{ scale: 1.2 }} transition={{ duration: 0.2 }}>
+                    <motion.div whileHover={{ scale: 1.2 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
                       <Phone className="w-5 h-5" />
                     </motion.div>
                     9451901542
@@ -1114,7 +1115,7 @@ export default function LandingPage() {
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 bg-slate-900 border border-slate-700 text-white px-6 py-3 rounded-full text-sm font-bold hover:bg-slate-800 hover:border-indigo-500 transition-all shadow-lg shadow-indigo-900/10 w-full justify-center group"
                   >
-                    <motion.div whileHover={{ scale: 1.2 }}>
+                    <motion.div whileHover={{ scale: 1.2 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
                       <WhatsAppIcon className="w-5 h-5 text-green-500" />
                     </motion.div>
                     Chat on WhatsApp
@@ -1127,7 +1128,7 @@ export default function LandingPage() {
           {/* Founder 2 */}
           <FadeIn delay={0.2}>
             <motion.div 
-              whileHover={{ y: -10 }}
+              whileHover={{ y: -10 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}
               className="bg-gradient-to-b from-white/[0.05] to-transparent p-10 rounded-3xl border border-white/10 hover:border-indigo-500/50 transition-colors duration-300 text-center group relative overflow-hidden h-full"
             >
               <div className="absolute inset-0 bg-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -1152,7 +1153,7 @@ export default function LandingPage() {
                 
                 <div className="flex flex-col gap-4 items-center">
                   <a href="tel:9251072575" className="flex items-center gap-3 text-slate-300 hover:text-white transition-colors px-4 py-2 rounded-lg hover:bg-white/5 w-full justify-center group">
-                    <motion.div whileHover={{ scale: 1.2 }} transition={{ duration: 0.2 }}>
+                    <motion.div whileHover={{ scale: 1.2 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
                       <Phone className="w-5 h-5" />
                     </motion.div>
                     9251072575
@@ -1163,7 +1164,7 @@ export default function LandingPage() {
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 bg-slate-900 border border-slate-700 text-white px-6 py-3 rounded-full text-sm font-bold hover:bg-slate-800 hover:border-indigo-500 transition-all shadow-lg shadow-indigo-900/10 w-full justify-center group"
                   >
-                    <motion.div whileHover={{ scale: 1.2 }}>
+                    <motion.div whileHover={{ scale: 1.2 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
                       <WhatsAppIcon className="w-5 h-5 text-green-500" />
                     </motion.div>
                     Chat on WhatsApp
@@ -1177,7 +1178,8 @@ export default function LandingPage() {
           <FadeIn delay={0.4}>
             <motion.div 
               whileHover={{ y: -10 }}
-              className="bg-gradient-to-b from-white/[0.05] to-transparent p-10 rounded-3xl border border-white/10 hover:border-pink-500/50 transition-colors duration-300 text-center group relative overflow-hidden h-full"
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="bg-gradient-to-b from-white/[0.05] to-transparent p-10 rounded-3xl border border-white/10 hover:border-rose-500/50 transition-colors duration-300 text-center group relative overflow-hidden h-full"
             >
               <div className="absolute inset-0 bg-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
               
@@ -1213,10 +1215,10 @@ export default function LandingPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}
                   className="flex items-center justify-center gap-3 bg-white/5 border border-white/10 w-56 py-4 rounded-full text-slate-400 hover:text-white hover:bg-white/10 hover:border-indigo-200/30 transition-all duration-300 group"
                 >
-                  <motion.div whileHover={{ rotate: 15, scale: 1.1 }}>
+                  <motion.div whileHover={{ rotate: 15, scale: 1.1 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
                     <Instagram className="w-5 h-5 group-hover:text-pink-500 transition-colors" />
                   </motion.div>
                   <span className="font-medium">Instagram</span>
@@ -1226,10 +1228,10 @@ export default function LandingPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}
                   className="flex items-center justify-center gap-3 bg-white/5 border border-white/10 w-56 py-4 rounded-full text-slate-400 hover:text-white hover:bg-white/10 hover:border-indigo-200/30 transition-all duration-300 group"
                 >
-                  <motion.div whileHover={{ rotate: -10, scale: 1.1 }}>
+                  <motion.div whileHover={{ rotate: -10, scale: 1.1 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
                     <WhatsAppIcon className="w-5 h-5 group-hover:text-green-500 transition-colors" />
                   </motion.div>
                   <span className="font-medium">WhatsApp Group</span>
@@ -1239,10 +1241,10 @@ export default function LandingPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}
                   className="flex items-center justify-center gap-3 bg-white/5 border border-white/10 w-56 py-4 rounded-full text-slate-400 hover:text-white hover:bg-white/10 hover:border-indigo-200/30 transition-all duration-300 group"
                 >
-                  <motion.div whileHover={{ rotate: 10, scale: 1.1 }}>
+                  <motion.div whileHover={{ rotate: 10, scale: 1.1 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
                     <Linkedin className="w-5 h-5 group-hover:text-blue-500 transition-colors" />
                   </motion.div>
                   <span className="font-medium">LinkedIn</span>
@@ -1250,10 +1252,10 @@ export default function LandingPage() {
                 <motion.a 
                   href="mailto:riet.ecell@gmail.com"
                   whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileTap={{ scale: 0.95 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}
                   className="flex items-center justify-center gap-3 bg-white/5 border border-white/10 w-56 py-4 rounded-full text-slate-400 hover:text-white hover:bg-white/10 hover:border-indigo-200/30 transition-all duration-300 group"
                 >
-                  <motion.div whileHover={{ scale: 1.1 }}>
+                  <motion.div whileHover={{ scale: 1.1 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
                     <Mail className="w-5 h-5 group-hover:text-indigo-500 transition-colors" />
                   </motion.div>
                   <span className="font-medium">Email Us</span>
