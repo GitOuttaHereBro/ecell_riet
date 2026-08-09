@@ -6,12 +6,12 @@ export const InteractiveParticles: React.FC = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     let animationFrameId: number;
     let particles: Particle[] = [];
+    let isVisible = true;
     
     // Config
     const particleCount = 80;
@@ -94,7 +94,6 @@ export const InteractiveParticles: React.FC = () => {
             this.x -= forceDirectionX * force * this.density * 0.6;
             this.y -= forceDirectionY * force * this.density * 0.6;
         }
-
       }
 
       draw() {
@@ -113,6 +112,11 @@ export const InteractiveParticles: React.FC = () => {
     };
 
     const animate = () => {
+      if (!isVisible) {
+        animationFrameId = requestAnimationFrame(animate);
+        return;
+      }
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
       for (let i = 0; i < particles.length; i++) {
@@ -135,8 +139,17 @@ export const InteractiveParticles: React.FC = () => {
           }
         }
       }
+
       animationFrameId = requestAnimationFrame(animate);
     };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        isVisible = entry.isIntersecting;
+      });
+    }, { threshold: 0 });
+    
+    observer.observe(canvas);
 
     window.addEventListener("resize", resize);
     resize();
@@ -146,6 +159,7 @@ export const InteractiveParticles: React.FC = () => {
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseout", handleMouseLeave);
+      observer.disconnect();
       cancelAnimationFrame(animationFrameId);
     };
   }, []);

@@ -1299,7 +1299,7 @@ export default function LandingPage() {
                   transition={{ type: "spring", stiffness: 300, damping: 10 }}
                   className="w-24 h-24 rounded-full mx-auto mb-6 flex items-center justify-center text-3xl font-bold text-white shadow-[0_0_20px_rgba(99,102,241,0.3)] relative overflow-hidden bg-slate-800"
                 >
-                  <img src="https://i.pinimg.com/originals/25/0d/51/250d51aa644ad81810d1d7908838e7f5.jpg" alt="Alok Gupta" className="absolute inset-0 w-full h-full object-cover" />
+                  <img src="https://i.pinimg.com/originals/25/0d/51/250d51aa644ad81810d1d7908838e7f5.jpg" alt="Alok Gupta" loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
                 </motion.div>
                 <h3 className="text-2xl font-bold mb-1 text-white">Alok Gupta</h3>
                 <p className="text-indigo-400 font-mono text-sm mb-8 tracking-widest uppercase">Founder</p>
@@ -1549,7 +1549,7 @@ export default function LandingPage() {
               transition={{ duration: 0.5 }}
               className="relative flex items-center justify-center w-16 h-16 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] overflow-hidden p-1.5 mb-4"
             >
-                <img src="https://i.pinimg.com/originals/21/1b/14/211b146f35a794e359b1fbee0bf3ef93.png" alt="E-CELL RIET Logo" className="w-full h-full object-cover rounded-xl" onError={(e) => (e.currentTarget.style.opacity = '0')} />
+                <img src="https://i.pinimg.com/originals/21/1b/14/211b146f35a794e359b1fbee0bf3ef93.png" alt="E-CELL RIET Logo" loading="lazy" className="w-full h-full object-cover rounded-xl" onError={(e) => (e.currentTarget.style.opacity = '0')} />
             </motion.div>
             <p className="font-bold text-white text-2xl tracking-tight mb-2">E-Cell RIET</p>
             <p className="text-slate-400">Rajasthan Institute of Engineering & Technology, Jaipur</p>
