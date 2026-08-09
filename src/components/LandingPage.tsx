@@ -1492,7 +1492,9 @@ export default function LandingPage() {
               
               <div className="flex flex-col sm:flex-row justify-center gap-6">
                 <motion.a 
-                  href="tel:9451901542"
+                  href="https://wa.me/919451901542?text=Hi%2C%20I%20would%20like%20to%20know%20more%20about%20Sponsorship%20opportunities"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(255,255,255,0.4)" }}
                   whileTap={{ scale: 0.95 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
@@ -1503,7 +1505,9 @@ export default function LandingPage() {
                 </motion.a>
                 
                 <motion.a 
-                  href="tel:9451901542"
+                  href="https://wa.me/919451901542?text=Hi%2C%20I%20would%20like%20to%20Speak%20at%20E-Cell"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   whileHover={{ scale: 1.05, backgroundColor: "rgba(30, 41, 59, 0.8)", borderColor: "rgba(148, 163, 184, 0.8)" }}
                   whileTap={{ scale: 0.95 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
