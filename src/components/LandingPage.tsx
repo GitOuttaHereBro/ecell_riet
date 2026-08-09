@@ -24,25 +24,16 @@ const WhatsAppIcon = ({ className }: { className?: string }) => (
 );
 
 const FadeIn: React.FC<FadeInProps> = ({ children, delay = 0, className = "" }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["0 1.1", "0.6 1"]
-  });
-
-  const springProgress = useSpring(scrollYProgress, { stiffness: 400, damping: 30, restDelta: 0.001 });
-  
-  const startOffset = Math.min(0.5, delay * 0.2);
-  const endOffset = Math.min(1, startOffset + 0.5);
-
-  const opacity = useTransform(springProgress, [startOffset, endOffset], [0, 1]);
-  const y = useTransform(springProgress, [startOffset, endOffset], [40, 0]);
-  const scale = useTransform(springProgress, [startOffset, endOffset], [0.95, 1]);
-
   return (
     <motion.div
-      ref={ref}
-      style={{ opacity, y, scale }}
+      initial={{ opacity: 0, y: 40, scale: 0.95 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ 
+        duration: 0.8, 
+        delay: delay * 0.2, 
+        ease: [0.22, 1, 0.36, 1] 
+      }}
       className={className}
     >
       {children}
@@ -114,22 +105,15 @@ const FAQItem: React.FC<FAQItemProps> = ({ faq, index }) => {
 };
 
 const SectionTitle = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => {
-  const ref = useRef<HTMLHeadingElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["0 1.1", "0.5 1"]
-  });
-
-  const springProgress = useSpring(scrollYProgress, { stiffness: 300, damping: 25, restDelta: 0.001 });
-  
-  const opacity = useTransform(springProgress, [0, 1], [0, 1]);
-  const y = useTransform(springProgress, [0, 1], [30, 0]);
-  const scale = useTransform(springProgress, [0, 1], [0.95, 1]);
-
   return (
     <motion.h2
-      ref={ref}
-      style={{ opacity, y, scale }}
+      initial={{ opacity: 0, y: 30, scale: 0.95 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ 
+        duration: 0.8, 
+        ease: [0.22, 1, 0.36, 1] 
+      }}
       className={className}
     >
       {children}
@@ -138,22 +122,16 @@ const SectionTitle = ({ children, className = "" }: { children: React.ReactNode;
 };
 
 const Section = ({ className, children, id }: { className?: string; children: React.ReactNode; id?: string }) => {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["0 1.1", "0.3 1"]
-  });
-
-  const springProgress = useSpring(scrollYProgress, { stiffness: 200, damping: 20, restDelta: 0.001 });
-
-  const opacity = useTransform(springProgress, [0, 1], [0, 1]);
-  const y = useTransform(springProgress, [0, 1], [50, 0]);
-
   return (
     <motion.section
       id={id}
-      ref={ref}
-      style={{ opacity, y }}
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ 
+        duration: 0.8, 
+        ease: [0.22, 1, 0.36, 1] 
+      }}
       className={`py-24 px-6 md:px-12 max-w-7xl mx-auto ${className}`}
     >
       {children}
@@ -521,7 +499,7 @@ export default function LandingPage() {
       </header>
 
       {/* 2. OUR MISSION */}
-      <Section className="relative">
+      <Section id="mission" className="relative">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-indigo-950/20 to-transparent -z-10 blur-3xl"></div>
         <div className="grid md:grid-cols-2 gap-16 items-center">
           <div>
@@ -949,10 +927,24 @@ export default function LandingPage() {
         <div className="grid md:grid-cols-2 gap-16 items-center relative z-10">
           <div>
             <SectionTitle className="text-4xl font-bold tracking-tight mb-6">Who Should Apply</SectionTitle>
-            <FadeIn delay={0.2}>
-              <p className="text-lg text-slate-300 mb-12 leading-relaxed">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+              variants={{
+                visible: { transition: { staggerChildren: 0.1 } },
+                hidden: {}
+              }}
+            >
+              <motion.p 
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+                }}
+                className="text-lg text-slate-300 mb-12 leading-relaxed"
+              >
                 This program is designed for serious builders who care about execution over certificates.
-              </p>
+              </motion.p>
               
               <div className="space-y-6">
                 {[
@@ -962,6 +954,10 @@ export default function LandingPage() {
                 ].map((item, i) => (
                   <motion.div 
                     key={i} 
+                    variants={{
+                      hidden: { opacity: 0, x: -20 },
+                      visible: { opacity: 1, x: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+                    }}
                     whileHover={{ x: 10 }}
                     className="flex gap-6 group cursor-default"
                   >
@@ -979,25 +975,46 @@ export default function LandingPage() {
                   </motion.div>
                 ))}
               </div>
-            </FadeIn>
+            </motion.div>
           </div>
 
-          <FadeIn delay={0.2}>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={{
+              visible: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
+              hidden: {}
+            }}
+          >
             <div className="bg-slate-900/50 backdrop-blur-md border border-slate-800 p-8 md:p-12 rounded-3xl relative overflow-hidden shadow-2xl">
               
-              <h3 className="text-2xl font-bold mb-8 text-slate-200 flex items-center gap-3">
+              <motion.h3 
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+                }}
+                className="text-2xl font-bold mb-8 text-slate-200 flex items-center gap-3"
+              >
                 This Program Is Not Designed For:
-              </h3>
+              </motion.h3>
               <ul className="space-y-6 font-medium text-slate-400">
                 {["Passive membership", "Attendance-based participation", "Certificate collection"].map((item, i) => (
-                  <li key={i} className="flex items-center gap-4">
+                  <motion.li 
+                    key={i} 
+                    variants={{
+                      hidden: { opacity: 0, x: -20 },
+                      visible: { opacity: 1, x: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+                    }}
+                    className="flex items-center gap-4"
+                  >
                     <span className="w-1.5 h-1.5 bg-slate-500 rounded-full"></span>
                     <span className="text-lg">{item}</span>
-                  </li>
+                  </motion.li>
                 ))}
               </ul>
             </div>
-          </FadeIn>
+          </motion.div>
         </div>
       </Section>
 
@@ -1232,7 +1249,7 @@ export default function LandingPage() {
       </Section>
 
       {/* FAQ SECTION */}
-      <Section>
+      <Section id="faq">
         <SectionTitle className="text-4xl font-bold tracking-tight mb-12 text-white">Frequently Asked Questions</SectionTitle>
         
         <div className="grid md:grid-cols-2 gap-x-12 gap-y-10">
