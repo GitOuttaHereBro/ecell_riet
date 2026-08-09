@@ -1108,9 +1108,9 @@ export default function LandingPage() {
           {[
             {
               quote: "The structured approach of this program is exactly what early-stage student founders need to bridge the gap between idea and execution.",
-              author: "Dulari Ma'am",
+              author: "Anshul Sir",
               role: "Mentor",
-              initials: "DM"
+              initials: "AS"
             },
             {
               quote: "E-Cell RIET is creating a culture of innovation that will define the next decade of the institute. This is where the future is built.",
@@ -1383,10 +1383,31 @@ export default function LandingPage() {
                   transition={{ type: "spring", stiffness: 300, damping: 10 }}
                   className="w-24 h-24 bg-gradient-to-br from-rose-500 to-red-600 rounded-full mx-auto mb-6 flex items-center justify-center text-3xl font-bold text-white shadow-[0_0_20px_rgba(244,63,94,0.3)] relative"
                 >
-                  DM
+                  AS
                 </motion.div>
-                <h3 className="text-2xl font-bold mb-1 text-white">Dulari Ma'am</h3>
+                <h3 className="text-2xl font-bold mb-1 text-white">Anshul Sir</h3>
                 <p className="text-rose-400 font-mono text-sm mb-8 tracking-widest uppercase">Mentor</p>
+
+                <div className="flex flex-col gap-4 items-center">
+                  <a href="tel:9468663300" className="flex items-center gap-3 text-slate-300 hover:text-white transition-colors px-4 py-2 rounded-lg hover:bg-white/5 w-full justify-center group">
+                    <motion.div whileHover={{ scale: 1.2 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
+                      <Phone className="w-5 h-5" />
+                    </motion.div>
+                    94686 63300
+                  </a>
+                  <a 
+                    href="https://wa.me/919468663300" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="relative overflow-hidden flex items-center gap-2 bg-slate-800 border border-slate-700 text-white px-6 py-3 rounded-full text-sm font-bold hover:bg-slate-700 hover:border-indigo-400 transition-all shadow-lg shadow-indigo-900/10 w-full justify-center group"
+                  >
+                    <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer" />
+                    <motion.div whileHover={{ scale: 1.2 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
+                      <WhatsAppIcon className="w-5 h-5 text-green-400" />
+                    </motion.div>
+                    <span className="relative">Chat on WhatsApp</span>
+                  </a>
+                </div>
               </div>
             </motion.div>
           </FadeIn>
@@ -1471,7 +1492,7 @@ export default function LandingPage() {
               
               <div className="flex flex-col sm:flex-row justify-center gap-6">
                 <motion.a 
-                  href="mailto:riet.ecell@gmail.com?subject=Sponsorship%20%2F%20Partnership%20Enquiry"
+                  href="tel:9451901542"
                   whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(255,255,255,0.4)" }}
                   whileTap={{ scale: 0.95 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
@@ -1482,7 +1503,7 @@ export default function LandingPage() {
                 </motion.a>
                 
                 <motion.a 
-                  href="mailto:riet.ecell@gmail.com?subject=Speaker%20%2F%20Mentor%20Enquiry"
+                  href="tel:9451901542"
                   whileHover={{ scale: 1.05, backgroundColor: "rgba(30, 41, 59, 0.8)", borderColor: "rgba(148, 163, 184, 0.8)" }}
                   whileTap={{ scale: 0.95 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
