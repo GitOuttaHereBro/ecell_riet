@@ -302,6 +302,7 @@ export default function LandingPage() {
              <button 
                 onClick={() => setIsMobileMenuOpen(true)}
                 className="md:hidden text-slate-300 p-2 hover:text-white transition-colors"
+                aria-label="Open Mobile Menu"
              >
                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
              </button>
@@ -331,6 +332,7 @@ export default function LandingPage() {
                 <button 
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="text-slate-300 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors"
+                  aria-label="Close Mobile Menu"
                 >
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
@@ -1109,7 +1111,7 @@ export default function LandingPage() {
       </Section>
 
       {/* TESTIMONIALS SECTION */}
-      <Section>
+      <Section id="voices">
         <div className="text-center mb-16">
           <div>
             <SectionTitle className="text-3xl md:text-4xl font-bold mb-6">Voices of Leadership</SectionTitle>

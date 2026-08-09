@@ -95,7 +95,7 @@ export default function FormDetails() {
       <header className="sticky top-0 z-40 bg-[#030712]/80 backdrop-blur-xl border-b border-slate-800">
         <div className="max-w-5xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-4">
-             <button onClick={() => navigate('/admin')} className="text-slate-400 hover:text-white transition-colors bg-slate-800 p-2 rounded-lg">
+             <button onClick={() => navigate('/admin')} className="text-slate-400 hover:text-white transition-colors bg-slate-800 p-2 rounded-lg" aria-label="Back to Dashboard">
                 <ArrowLeft className="w-5 h-5" />
              </button>
              <div>
