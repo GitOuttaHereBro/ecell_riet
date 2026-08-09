@@ -32,7 +32,10 @@ export default function FormDetails() {
         headers: { Authorization: `Bearer ${token}` }
       });
       
-      if (!formRes.ok) throw new Error('Failed to fetch form data');
+      if (!formRes.ok) {
+        const errorData = await formRes.json().catch(() => ({}));
+        throw new Error(errorData?.error?.message || 'Failed to fetch form data');
+      }
       const formData = await formRes.json();
       setForm(formData);
 
@@ -41,7 +44,10 @@ export default function FormDetails() {
         headers: { Authorization: `Bearer ${token}` }
       });
       
-      if (!responsesRes.ok) throw new Error('Failed to fetch responses');
+      if (!responsesRes.ok) {
+        const errorData = await responsesRes.json().catch(() => ({}));
+        throw new Error(errorData?.error?.message || 'Failed to fetch responses');
+      }
       const responsesData = await responsesRes.json();
       
       if (responsesData.responses) {

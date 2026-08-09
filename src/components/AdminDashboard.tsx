@@ -12,6 +12,7 @@ export default function AdminDashboard() {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [forms, setForms] = useState<any[]>([]);
   const [loadingForms, setLoadingForms] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   
   const navigate = useNavigate();
 
@@ -34,6 +35,7 @@ export default function AdminDashboard() {
 
   const handleLogin = async () => {
     setIsLoggingIn(true);
+    setError(null);
     try {
       const result = await googleSignIn();
       if (result) {
@@ -42,8 +44,9 @@ export default function AdminDashboard() {
         setNeedsAuth(false);
         fetchForms(result.accessToken);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Login failed:', err);
+      setError(err.message || 'Login failed.');
     } finally {
       setIsLoggingIn(false);
     }
@@ -55,21 +58,28 @@ export default function AdminDashboard() {
     setUser(null);
     setToken(null);
     setForms([]);
+    setError(null);
   };
 
   const fetchForms = async (accessToken: string) => {
     setLoadingForms(true);
+    setError(null);
     try {
       // Find files of type 'application/vnd.google-apps.form' using Google Drive API
       const res = await fetch('https://www.googleapis.com/drive/v3/files?q=mimeType=\'application/vnd.google-apps.form\' and trashed=false&fields=files(id,name,createdTime,webViewLink)', {
         headers: { Authorization: `Bearer ${accessToken}` }
       });
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData?.error?.message || `Failed to fetch forms: ${res.statusText}`);
+      }
       const data = await res.json();
       if (data.files) {
         setForms(data.files);
       }
-    } catch (error) {
-      console.error("Error fetching forms:", error);
+    } catch (err: any) {
+      console.error("Error fetching forms:", err);
+      setError(err.message || 'Failed to fetch forms.');
     } finally {
       setLoadingForms(false);
     }
@@ -92,6 +102,12 @@ export default function AdminDashboard() {
           <h1 className="text-3xl font-bold mb-3 text-white">Forms Admin</h1>
           <p className="text-slate-400 mb-10 text-sm">Sign in with your Google Workspace account to view and manage your E-Cell application forms.</p>
           
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-xl mb-6 text-sm">
+              {error}
+            </div>
+          )}
+
           <button 
             disabled={isLoggingIn}
             onClick={handleLogin}
@@ -153,6 +169,13 @@ export default function AdminDashboard() {
         {loadingForms ? (
           <div className="flex justify-center items-center py-20">
             <Loader2 className="w-10 h-10 animate-spin text-indigo-500" />
+          </div>
+        ) : error ? (
+          <div className="text-center py-20 bg-slate-900 border border-slate-800 rounded-3xl">
+            <div className="bg-red-500/10 text-red-500 p-6 rounded-2xl max-w-lg mx-auto border border-red-500/20">
+               <h3 className="text-xl font-bold mb-2">Error</h3>
+               <p>{error}</p>
+            </div>
           </div>
         ) : forms.length === 0 ? (
           <div className="text-center py-20 bg-slate-900 border border-slate-800 rounded-3xl">
