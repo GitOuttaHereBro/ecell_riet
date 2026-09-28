@@ -4,6 +4,7 @@ import { ArrowRight, CheckCircle, Clock, Target, Users, Zap, ChevronRight, Exter
 
 import { InteractiveParticles } from './InteractiveParticles';
 import { useLenis } from 'lenis/react';
+import { EventsSection } from './EventsSection';
 
 const GOOGLE_FORM_LINK = "https://docs.google.com/forms/d/e/1FAIpQLSdKRM7wXrG_F-mQyrAdKOM6A8FRKgH3ydPtQXiWaf3u01L0JQ/viewform?usp=publish-editor";
 
@@ -262,6 +263,7 @@ export default function LandingPage() {
           <div className="hidden md:flex items-center gap-2 text-sm font-medium text-slate-300">
              {[
                { name: 'Program', id: 'how-it-works' },
+               { name: 'Events', id: 'events' },
                { name: 'Voices', id: 'voices' },
                { name: 'Partner', id: 'partner' },
                { name: 'Contact', id: 'contact' }
@@ -341,6 +343,10 @@ export default function LandingPage() {
               <div className="flex flex-col gap-6 text-lg font-medium text-slate-200">
                 <a href="#how-it-works" onClick={(e) => { handleSmoothScroll(e, 'how-it-works'); setIsMobileMenuOpen(false); }} className="hover:text-indigo-400 transition-colors py-3 border-b border-white/5 flex items-center justify-between group">
                   Program
+                  <ChevronRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
+                </a>
+                <a href="#events" onClick={(e) => { handleSmoothScroll(e, 'events'); setIsMobileMenuOpen(false); }} className="hover:text-indigo-400 transition-colors py-3 border-b border-white/5 flex items-center justify-between group">
+                  Events
                   <ChevronRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
                 </a>
                 <a href="#voices" onClick={(e) => { handleSmoothScroll(e, 'voices'); setIsMobileMenuOpen(false); }} className="hover:text-indigo-400 transition-colors py-3 border-b border-white/5 flex items-center justify-between group">
@@ -1110,6 +1116,9 @@ export default function LandingPage() {
         </div>
       </Section>
 
+      {/* 6. EVENTS - EVENTS ORGANIZED BY E-CELL */}
+      <EventsSection />
+
       {/* TESTIMONIALS SECTION */}
       <Section id="voices">
         <div className="text-center mb-16">
@@ -1559,6 +1568,7 @@ export default function LandingPage() {
           
           <div className="flex justify-center gap-8 mb-8">
             <a href="#how-it-works" onClick={(e) => handleSmoothScroll(e, 'how-it-works')} className="hover:text-indigo-400 transition-colors">Program</a>
+            <a href="#events" onClick={(e) => handleSmoothScroll(e, 'events')} className="hover:text-indigo-400 transition-colors">Events</a>
             <a href="#mission" onClick={(e) => handleSmoothScroll(e, 'mission')} className="hover:text-indigo-400 transition-colors">Mission</a>
             <a href="#faq" onClick={(e) => handleSmoothScroll(e, 'faq')} className="hover:text-indigo-400 transition-colors">FAQ</a>
           </div>
