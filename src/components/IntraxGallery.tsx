@@ -1,38 +1,19 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Play, 
-  Image as ImageIcon, 
-  Film, 
-  UploadCloud, 
   X, 
   ChevronLeft, 
   ChevronRight, 
   Maximize2, 
-  CheckCircle2, 
   Sparkles, 
   Users, 
   Mic2, 
   Award, 
-  Trash2, 
-  Info,
-  Clock,
-  Layers,
+  Film,
   LayoutGrid,
-  Grid3X3,
-  Calendar,
-  Compass,
-  ArrowUpRight,
-  ShieldCheck,
-  Tag,
-  Volume2
+  Grid3X3
 } from 'lucide-react';
-import { 
-  StoredMediaItem, 
-  saveMediaItemToDB, 
-  getAllMediaItemsFromDB, 
-  deleteMediaItemFromDB 
-} from '../lib/galleryStorage';
 
 export interface GalleryMediaItem {
   id: string;
@@ -49,10 +30,9 @@ export interface GalleryMediaItem {
   keyTakeaway?: string;
   badge: string;
   featured?: boolean;
-  isUserUploaded?: boolean;
 }
 
-// Curated authentic highlights based on the uploaded event media
+// Curated authentic highlights based on the INTRAX session
 const CURATED_HIGHLIGHTS: GalleryMediaItem[] = [
   {
     id: 'highlight-slide-keynote',
@@ -204,138 +184,9 @@ const CURATED_HIGHLIGHTS: GalleryMediaItem[] = [
 export const IntraxGallery: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'all' | 'speakers' | 'audience' | 'felicitation' | 'videos'>('all');
   const [layoutMode, setLayoutMode] = useState<'bento' | 'grid'>('bento');
-  const [userUploadedMedia, setUserUploadedMedia] = useState<StoredMediaItem[]>([]);
   const [currentModalIndex, setCurrentModalIndex] = useState<number | null>(null);
 
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState<string>('');
-  const [isDragging, setIsDragging] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Load any previously uploaded media from IndexedDB on mount
-  useEffect(() => {
-    let isMounted = true;
-    getAllMediaItemsFromDB().then((items) => {
-      if (isMounted) {
-        setUserUploadedMedia(items);
-      }
-    });
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  // Process uploaded files with HEIC to JPEG conversion and IndexedDB persistence
-  const processFiles = async (files: FileList | File[]) => {
-    if (!files || files.length === 0) return;
-
-    setIsUploading(true);
-    setUploadProgress(`Processing ${files.length} media file(s)...`);
-
-    try {
-      let heic2anyModule: any = null;
-
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const isHeic = file.name.toLowerCase().endsWith('.heic') || file.type.includes('heic') || file.type.includes('heif');
-        const isVid = file.type.startsWith('video/') || file.name.toLowerCase().endsWith('.mov') || file.name.toLowerCase().endsWith('.mp4');
-
-        setUploadProgress(`Processing ${file.name} (${i + 1}/${files.length})...`);
-
-        let finalBlob: Blob = file;
-
-        if (isHeic) {
-          try {
-            if (!heic2anyModule) {
-              const mod = await import('heic2any');
-              heic2anyModule = mod.default || mod;
-            }
-            const converted = await heic2anyModule({
-              blob: file,
-              toType: 'image/jpeg',
-              quality: 0.85
-            });
-            finalBlob = Array.isArray(converted) ? converted[0] : converted;
-          } catch (err) {
-            console.warn('HEIC fallback for', file.name, err);
-            finalBlob = file;
-          }
-        }
-
-        const category: StoredMediaItem['category'] = isVid ? 'videos' : 'audience';
-        const formattedSize = `${(file.size / (1024 * 1024)).toFixed(1)} MB`;
-
-        const saved = await saveMediaItemToDB({
-          id: `upload-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
-          name: file.name,
-          type: isVid ? 'video' : 'image',
-          caption: `INTRAX Event Capture · ${file.name}`,
-          category,
-          categoryLabel: isVid ? 'Video Clip' : 'Photo Highlight',
-          timestamp: Date.now(),
-          sizeFormatted: formattedSize,
-          blob: finalBlob
-        });
-
-        setUserUploadedMedia(prev => [saved, ...prev]);
-      }
-    } catch (err) {
-      console.error('Error uploading media:', err);
-    } finally {
-      setIsUploading(false);
-      setUploadProgress('');
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-    }
-  };
-
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      processFiles(e.target.files);
-    }
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      processFiles(e.dataTransfer.files);
-    }
-  };
-
-  const handleDeleteUploadedItem = async (e: React.MouseEvent, id: string) => {
-    e.stopPropagation();
-    await deleteMediaItemFromDB(id);
-    setUserUploadedMedia(prev => prev.filter(item => item.id !== id));
-    if (currentModalIndex !== null) {
-      setCurrentModalIndex(null);
-    }
-  };
-
-  // Combine user uploaded items and curated items into one unified dataset
-  const allDisplayItems: GalleryMediaItem[] = [
-    ...userUploadedMedia.map(item => ({
-      id: item.id,
-      title: item.name,
-      caption: item.caption,
-      type: item.type,
-      category: item.category,
-      categoryLabel: item.categoryLabel,
-      url: item.url,
-      timestampStr: item.sizeFormatted,
-      speakerTag: 'Captured at INTRAX',
-      badge: 'Uploaded Media',
-      featured: false,
-      isUserUploaded: true
-    })),
-    ...CURATED_HIGHLIGHTS.map(h => ({
-      ...h,
-      isUserUploaded: false
-    }))
-  ];
-
-  const filteredItems = allDisplayItems.filter(item => {
+  const filteredItems = CURATED_HIGHLIGHTS.filter(item => {
     if (activeTab === 'all') return true;
     return item.category === activeTab;
   });
@@ -373,21 +224,21 @@ export const IntraxGallery: React.FC = () => {
             <span>INTRAX Archive</span>
           </div>
           <h4 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight">
-            Visual Highlights & Media Vault
+            Visual Highlights & Media Gallery
           </h4>
           <p className="text-slate-400 text-sm sm:text-base mt-1 max-w-2xl leading-relaxed">
             A structured visual chronicle of INTRAX—spanning keynote presentation slides, speaker moments with Keshav Bhatt & Aarav Saini, more than 170 attending first-year students, and live video reels.
           </p>
         </div>
 
-        {/* Gallery Controls: Grid View Toggle & Upload Button */}
-        <div className="flex flex-wrap items-center gap-3">
+        {/* Gallery Controls: Grid View Toggle */}
+        <div className="flex items-center gap-3">
           {/* Layout Mode Toggle */}
-          <div className="hidden sm:flex items-center bg-slate-900 border border-slate-800 rounded-xl p-1 text-slate-400">
+          <div className="flex items-center bg-slate-900 border border-slate-800 rounded-xl p-1 text-slate-400">
             <button
               onClick={() => setLayoutMode('bento')}
               title="Bento Highlight Grid"
-              className={`p-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
                 layoutMode === 'bento' ? 'bg-indigo-600 text-white' : 'hover:text-white'
               }`}
             >
@@ -397,7 +248,7 @@ export const IntraxGallery: React.FC = () => {
             <button
               onClick={() => setLayoutMode('grid')}
               title="Uniform Grid"
-              className={`p-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer ${
                 layoutMode === 'grid' ? 'bg-indigo-600 text-white' : 'hover:text-white'
               }`}
             >
@@ -405,79 +256,24 @@ export const IntraxGallery: React.FC = () => {
               <span>Grid</span>
             </button>
           </div>
-
-          {/* Hidden File Input */}
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleFileUpload}
-            multiple
-            accept="image/*,video/*,.heic,.HEIC,.mov,.mp4"
-            className="hidden"
-          />
-
-          {/* Upload Button */}
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            disabled={isUploading}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-semibold transition-all shadow-lg shadow-indigo-600/20 cursor-pointer disabled:opacity-50"
-          >
-            <UploadCloud className="w-4 h-4" />
-            <span>{isUploading ? 'Uploading...' : 'Add Photos / Videos'}</span>
-          </button>
         </div>
       </div>
 
-      {/* Drag & Drop Notice Banner if uploading or idle */}
-      {isUploading ? (
-        <div className="mb-6 p-4 rounded-2xl bg-indigo-950/70 border border-indigo-500/40 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3 text-xs text-indigo-200 font-mono">
-            <div className="w-4 h-4 rounded-full border-2 border-indigo-400 border-t-transparent animate-spin" />
-            <span>{uploadProgress}</span>
-          </div>
-          <span className="text-[11px] text-slate-400">Converting HEIC & saving to local vault...</span>
-        </div>
-      ) : (
-        <div
-          onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-          onDragLeave={() => setIsDragging(false)}
-          onDrop={handleDrop}
-          className={`mb-8 p-4 rounded-2xl border-2 border-dashed transition-all flex flex-col sm:flex-row items-center justify-between gap-4 ${
-            isDragging 
-              ? 'border-indigo-400 bg-indigo-950/30' 
-              : 'border-slate-800/80 bg-slate-900/30 hover:border-slate-700'
-          }`}
-        >
-          <div className="flex items-center gap-3 text-xs text-slate-300">
-            <div className="w-8 h-8 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center shrink-0">
-              <UploadCloud className="w-4 h-4" />
-            </div>
-            <div>
-              <span className="font-semibold text-white block">Drop event captures here or browse</span>
-              <span className="text-slate-400 text-[11px]">Supports iPhone HEIC, JPG, PNG, and MP4/MOV videos with instant browser preview.</span>
-            </div>
-          </div>
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            className="text-xs font-mono text-indigo-400 hover:text-indigo-300 underline underline-offset-4 shrink-0"
-          >
-            Browse files
-          </button>
-        </div>
-      )}
-
-      {/* Filter Tabs (Clean anti-slop segmented controls) */}
+      {/* Filter Tabs (Segmented controls) */}
       <div className="flex items-center gap-1.5 overflow-x-auto p-1.5 bg-slate-900/80 border border-slate-800 rounded-xl mb-8 scrollbar-none">
         {[
-          { id: 'all', label: 'All Media', count: allDisplayItems.length },
-          { id: 'speakers', label: 'Keynote & Stage', icon: Mic2 },
-          { id: 'audience', label: 'Audience & Hall', icon: Users },
-          { id: 'felicitation', label: 'Felicitation Moments', icon: Award },
-          { id: 'videos', label: 'Video Snippets & Reels', icon: Film }
+          { id: 'all', label: 'All Highlights', count: CURATED_HIGHLIGHTS.length },
+          { id: 'speakers', label: 'Keynote & Stage', count: CURATED_HIGHLIGHTS.filter(i => i.category === 'speakers').length, icon: Mic2 },
+          { id: 'audience', label: 'Audience & Hall', count: CURATED_HIGHLIGHTS.filter(i => i.category === 'audience').length, icon: Users },
+          { id: 'felicitation', label: 'Felicitation', count: CURATED_HIGHLIGHTS.filter(i => i.category === 'felicitation').length, icon: Award },
+          { id: 'videos', label: 'Video Snippets & Reels', count: CURATED_HIGHLIGHTS.filter(i => i.category === 'videos').length, icon: Film }
         ].map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as any)}
+            onClick={() => {
+              setActiveTab(tab.id as any);
+              setCurrentModalIndex(null);
+            }}
             className={`px-4 py-2 text-xs font-semibold rounded-lg whitespace-nowrap transition-all duration-200 cursor-pointer flex items-center gap-2 ${
               activeTab === tab.id
                 ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
@@ -486,6 +282,11 @@ export const IntraxGallery: React.FC = () => {
           >
             {tab.icon && <tab.icon className="w-3.5 h-3.5" />}
             <span>{tab.label}</span>
+            <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
+              activeTab === tab.id ? 'bg-indigo-500 text-white' : 'bg-slate-800 text-slate-400'
+            }`}>
+              {tab.count}
+            </span>
           </button>
         ))}
       </div>
@@ -516,64 +317,46 @@ export const IntraxGallery: React.FC = () => {
             >
               {/* Media Container / Visual Canvas */}
               <div className="relative w-full h-full min-h-[170px] overflow-hidden bg-slate-900 flex-1">
-                {item.url ? (
-                  item.type === 'video' ? (
-                    <video 
-                      src={item.url} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
-                      muted 
-                      playsInline 
-                    />
-                  ) : (
-                    <img
-                      src={item.url}
-                      alt={item.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      loading="lazy"
-                    />
-                  )
-                ) : (
-                  /* Curated High-Fidelity Snapshot Canvas */
-                  <div className={`w-full h-full bg-gradient-to-br ${item.customThumbCss || 'from-indigo-900/40 via-slate-900 to-slate-950'} p-6 flex flex-col justify-between relative`}>
-                    {/* Top tags */}
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-mono uppercase tracking-widest text-indigo-300 bg-slate-950/80 border border-white/10 px-2.5 py-1 rounded-md backdrop-blur-sm">
-                        {item.badge}
-                      </span>
-                      {item.type === 'video' ? (
-                        <div className="flex items-center gap-1.5">
-                          {item.duration && (
-                            <span className="text-[10px] font-mono bg-black/60 px-2 py-0.5 rounded text-white border border-white/10">
-                              {item.duration}
-                            </span>
-                          )}
-                          <span className="w-8 h-8 rounded-full bg-rose-600 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                            <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
+                {/* Curated High-Fidelity Snapshot Canvas */}
+                <div className={`w-full h-full bg-gradient-to-br ${item.customThumbCss || 'from-indigo-900/40 via-slate-900 to-slate-950'} p-6 flex flex-col justify-between relative`}>
+                  {/* Top tags */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-indigo-300 bg-slate-950/80 border border-white/10 px-2.5 py-1 rounded-md backdrop-blur-sm">
+                      {item.badge}
+                    </span>
+                    {item.type === 'video' ? (
+                      <div className="flex items-center gap-1.5">
+                        {item.duration && (
+                          <span className="text-[10px] font-mono bg-black/60 px-2 py-0.5 rounded text-white border border-white/10">
+                            {item.duration}
                           </span>
-                        </div>
-                      ) : (
-                        <span className="w-8 h-8 rounded-full bg-slate-800/80 text-indigo-300 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                          <Maximize2 className="w-3.5 h-3.5" />
+                        )}
+                        <span className="w-8 h-8 rounded-full bg-rose-600 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                          <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
                         </span>
-                      )}
-                    </div>
-
-                    {/* Middle / Bottom Typography Showcase */}
-                    <div>
-                      <span className="text-[10px] font-mono text-indigo-300/80 block mb-1">
-                        {item.timestampStr}
+                      </div>
+                    ) : (
+                      <span className="w-8 h-8 rounded-full bg-slate-800/80 text-indigo-300 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                        <Maximize2 className="w-3.5 h-3.5" />
                       </span>
-                      <h6 className="text-white text-base sm:text-lg font-bold leading-tight line-clamp-2">
-                        {item.title}
-                      </h6>
-                      {isFeaturedBento && item.keyTakeaway && (
-                        <p className="text-xs text-indigo-200/90 mt-2 line-clamp-2 bg-slate-950/60 p-2 rounded-lg border border-white/5">
-                          {item.keyTakeaway}
-                        </p>
-                      )}
-                    </div>
+                    )}
                   </div>
-                )}
+
+                  {/* Middle / Bottom Typography Showcase */}
+                  <div>
+                    <span className="text-[10px] font-mono text-indigo-300/80 block mb-1">
+                      {item.timestampStr}
+                    </span>
+                    <h6 className="text-white text-base sm:text-lg font-bold leading-tight line-clamp-2">
+                      {item.title}
+                    </h6>
+                    {isFeaturedBento && item.keyTakeaway && (
+                      <p className="text-xs text-indigo-200/90 mt-2 line-clamp-2 bg-slate-950/60 p-2 rounded-lg border border-white/5">
+                        {item.keyTakeaway}
+                      </p>
+                    )}
+                  </div>
+                </div>
 
                 {/* Hover Play / Expand Indicator */}
                 <div className="absolute inset-0 bg-indigo-950/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
@@ -582,17 +365,6 @@ export const IntraxGallery: React.FC = () => {
                     <span>{item.type === 'video' ? 'Play Video Reel' : 'View Full Highlight'}</span>
                   </span>
                 </div>
-
-                {/* Delete button for uploaded files */}
-                {item.isUserUploaded && (
-                  <button
-                    onClick={(e) => handleDeleteUploadedItem(e, item.id)}
-                    title="Delete uploaded item"
-                    className="absolute top-2.5 right-2.5 p-1.5 rounded-lg bg-black/70 hover:bg-rose-600 text-slate-300 hover:text-white transition-colors z-20"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
-                )}
               </div>
 
               {/* Information Row */}
@@ -614,7 +386,7 @@ export const IntraxGallery: React.FC = () => {
         })}
       </div>
 
-      {/* FULLSCREEN LIGHTBOX & MEDIA CAROUSEL */}
+      {/* FULLSCREEN LIGHTBOX & MEDIA VIEWER */}
       <AnimatePresence>
         {selectedItem && currentModalIndex !== null && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
@@ -645,21 +417,21 @@ export const IntraxGallery: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setCurrentModalIndex(prev => (prev !== null && prev > 0 ? prev - 1 : filteredItems.length - 1))}
-                    className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+                    className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer"
                     title="Previous (Left arrow)"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => setCurrentModalIndex(prev => (prev !== null && prev < filteredItems.length - 1 ? prev + 1 : 0))}
-                    className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+                    className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer"
                     title="Next (Right arrow)"
                   >
                     <ChevronRight className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => setCurrentModalIndex(null)}
-                    className="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white transition-colors ml-2"
+                    className="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white transition-colors ml-2 cursor-pointer"
                     title="Close (Esc)"
                   >
                     <X className="w-4 h-4" />
@@ -669,53 +441,42 @@ export const IntraxGallery: React.FC = () => {
 
               {/* Media Viewing Canvas */}
               <div className="relative aspect-video sm:aspect-[16/9] w-full bg-black flex items-center justify-center overflow-hidden">
-                {selectedItem.url ? (
-                  selectedItem.type === 'video' ? (
-                    <video
-                      src={selectedItem.url}
-                      controls
-                      autoPlay
-                      playsInline
-                      className="w-full h-full object-contain"
-                    />
-                  ) : (
-                    <img
-                      src={selectedItem.url}
-                      alt={selectedItem.title}
-                      className="w-full h-full object-contain"
-                    />
-                  )
-                ) : (
-                  /* Curated Detailed Presentation Mockup */
-                  <div className="w-full h-full bg-gradient-to-br from-indigo-950 via-slate-950 to-slate-900 p-8 sm:p-12 flex flex-col justify-between text-white relative">
-                    <div className="flex items-center gap-2 text-xs font-mono text-indigo-400">
+                <div className={`w-full h-full bg-gradient-to-br ${selectedItem.customThumbCss || 'from-indigo-950 via-slate-950 to-slate-900'} p-8 sm:p-12 flex flex-col justify-between text-white relative`}>
+                  <div className="flex items-center justify-between text-xs font-mono text-indigo-400">
+                    <div className="flex items-center gap-2">
                       <Sparkles className="w-4 h-4 text-indigo-400" />
                       <span>INTRAX HIGHLIGHT ARCHIVE</span>
                       <span aria-hidden="true">·</span>
                       <span>RIET AUDITORIUM</span>
                     </div>
-
-                    <div className="max-w-2xl">
-                      <span className="text-xs font-mono text-amber-300 uppercase tracking-widest block mb-2">
-                        {selectedItem.timestampStr || 'Keynote Presentation'}
-                      </span>
-                      <h3 className="text-2xl sm:text-4xl font-extrabold leading-tight mb-4 text-white">
-                        {selectedItem.title}
-                      </h3>
-                      {selectedItem.keyTakeaway && (
-                        <div className="p-4 rounded-xl bg-slate-900/80 border border-indigo-500/30 text-indigo-200 text-sm leading-relaxed mb-4">
-                          <strong className="text-white block font-semibold mb-1">Key Insight:</strong>
-                          {selectedItem.keyTakeaway}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex items-center justify-between text-xs text-slate-400 pt-4 border-t border-white/10">
-                      <span>{selectedItem.speakerTag}</span>
-                      <span className="text-emerald-400 font-mono">Concluded Live Session</span>
-                    </div>
+                    <span className="text-[11px] font-mono px-2.5 py-1 rounded bg-black/40 border border-white/10 text-indigo-200">
+                      {selectedItem.badge}
+                    </span>
                   </div>
-                )}
+
+                  <div className="max-w-2xl my-auto py-6">
+                    <span className="text-xs font-mono text-amber-300 uppercase tracking-widest block mb-2">
+                      {selectedItem.timestampStr || 'Keynote Presentation'}
+                    </span>
+                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold leading-tight mb-4 text-white">
+                      {selectedItem.title}
+                    </h3>
+                    {selectedItem.keyTakeaway && (
+                      <div className="p-4 rounded-xl bg-slate-900/80 border border-indigo-500/30 text-indigo-200 text-sm leading-relaxed mb-4">
+                        <strong className="text-white block font-semibold mb-1">Key Insight:</strong>
+                        {selectedItem.keyTakeaway}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex items-center justify-between text-xs text-slate-400 pt-4 border-t border-white/10">
+                    <span className="font-mono text-slate-300">{selectedItem.speakerTag}</span>
+                    <span className="text-emerald-400 font-mono flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      Concluded Live Session
+                    </span>
+                  </div>
+                </div>
               </div>
 
               {/* Information Drawer */}
@@ -740,7 +501,7 @@ export const IntraxGallery: React.FC = () => {
                   </div>
 
                   <span className="text-slate-500 font-mono text-[11px]">
-                    Use Left / Right arrow keys to browse
+                    Use Left / Right arrow keys or buttons to navigate
                   </span>
                 </div>
               </div>
