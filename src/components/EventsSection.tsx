@@ -14,12 +14,14 @@ import {
   Terminal, 
   Code2, 
   Briefcase, 
-  Mic2,
-  Compass,
-  ArrowUpRight,
-  ShieldCheck,
-  BellRing
+  Mic2, 
+  Compass, 
+  ArrowUpRight, 
+  ShieldCheck, 
+  BellRing,
+  Camera
 } from 'lucide-react';
+import { IntraxGallery } from './IntraxGallery';
 
 const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/ENTpUc2WWwiLRuabTSoRVj/";
 const GOOGLE_FORM_LINK = "https://docs.google.com/forms/d/e/1FAIpQLSdKRM7wXrG_F-mQyrAdKOM6A8FRKgH3ydPtQXiWaf3u01L0JQ/viewform?usp=publish-editor";
@@ -147,9 +149,9 @@ export const EventsSection: React.FC = () => {
             <span className="text-slate-400">RIET Campus Auditorium</span>
           </div>
 
-          <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
+          <div className="flex items-center gap-2 text-xs font-mono text-slate-300 bg-indigo-500/10 border border-indigo-500/20 px-3 py-1 rounded-full">
             <Users className="w-4 h-4 text-indigo-400" />
-            <span>Packed Student Attendance</span>
+            <span className="font-semibold text-white">170+ First Year Students Attended</span>
           </div>
         </div>
 
@@ -165,7 +167,7 @@ export const EventsSection: React.FC = () => {
             </span>
           </h3>
           <p className="text-slate-300 text-base sm:text-lg leading-relaxed">
-            The benchmark inaugural orientation and induction event organized by the <strong className="text-white">E-Cell President</strong>, <strong className="text-white">Vice Presidents</strong>, and student <strong className="text-white">entrepreneurs & founders</strong>. Designed to ignite the spirit of innovation, demystify national-level hackathons, and lay down the year-long execution roadmap for aspiring campus builders.
+            The benchmark inaugural orientation and induction event organized by the <strong className="text-white">E-Cell President</strong>, <strong className="text-white">Vice Presidents</strong>, and student <strong className="text-white">entrepreneurs & founders</strong>. Attended by <strong className="text-white">more than 170 first-year engineering students</strong>, INTRAX was designed to ignite the spirit of innovation, demystify national-level hackathons, and lay down the year-long execution roadmap for aspiring campus builders.
           </p>
         </div>
 
@@ -279,7 +281,7 @@ export const EventsSection: React.FC = () => {
               </div>
               <h5 className="text-base font-semibold text-white mb-2">E-Cell Mission Unveiled</h5>
               <p className="text-xs text-slate-400 leading-relaxed">
-                The President and Vice Presidents laid out the structured journey from idea to deployment, ensuring every student has access to mentorship, startup resources, and incubation support.
+                Welcoming 170+ first-year innovators, the President and Vice Presidents laid out the structured journey from idea to deployment with continuous mentorship, resources, and incubation.
               </p>
             </div>
 
@@ -305,8 +307,11 @@ export const EventsSection: React.FC = () => {
           </div>
         </div>
 
+        {/* INTRAX EVENT HIGHLIGHTS & MEDIA GALLERY */}
+        <IntraxGallery />
+
         {/* Action Row */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 mt-4 border-t border-slate-800/80">
           <div className="text-xs text-slate-400 flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
             <span>Successfully completed on campus with overwhelming student response.</span>
@@ -428,7 +433,7 @@ export const EventsSection: React.FC = () => {
                     Event Background & Objective
                   </h4>
                   <p className="text-slate-300 text-sm leading-relaxed">
-                    INTRAX was conceived as the foundational milestone of E-Cell RIET to shatter passive learning and install an active building culture on campus. The session brought together hundreds of enthusiastic students to interact directly with proven builders, national hackathon champions, and college leadership.
+                    INTRAX was conceived as the foundational milestone of E-Cell RIET to shatter passive learning and install an active building culture on campus. More than 170 first-year engineering students attended the session to interact directly with proven builders, national hackathon champions, and college leadership.
                   </p>
                 </div>
 
