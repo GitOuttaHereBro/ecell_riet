@@ -7,6 +7,7 @@ import { ReactLenis } from 'lenis/react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 import LandingPage from './components/LandingPage';
+import EventsPage from './components/EventsPage';
 
 const AdminDashboard = lazy(() => import('./components/AdminDashboard'));
 const FormDetails = lazy(() => import('./components/FormDetails'));
@@ -21,6 +22,14 @@ export default function App() {
             element={
               <ReactLenis root options={{ lerp: 0.05, duration: 1.5, smoothWheel: true }}>
                 <LandingPage />
+              </ReactLenis>
+            } 
+          />
+          <Route 
+            path="/events" 
+            element={
+              <ReactLenis root options={{ lerp: 0.05, duration: 1.5, smoothWheel: true }}>
+                <EventsPage />
               </ReactLenis>
             } 
           />

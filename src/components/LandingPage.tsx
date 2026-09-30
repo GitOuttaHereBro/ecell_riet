@@ -1,9 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent, useSpring } from 'motion/react';
-import { ArrowRight, CheckCircle, Clock, Target, Users, Zap, ChevronRight, ExternalLink, Phone, MessageCircle, Instagram, Quote, Mail, Lightbulb, Globe, User, Calendar, DollarSign, AlertCircle, Linkedin, ChevronDown, Info, TestTube, Hammer, Rocket } from 'lucide-react';
+import { ArrowRight, CheckCircle, Clock, Target, Users, Zap, ChevronRight, ExternalLink, Phone, MessageCircle, Instagram, Quote, Mail, Lightbulb, Globe, User, Calendar, DollarSign, AlertCircle, Linkedin, ChevronDown, Info, TestTube, Hammer, Rocket, X, Sparkles } from 'lucide-react';
 
 import { InteractiveParticles } from './InteractiveParticles';
 import { useLenis } from 'lenis/react';
+import { useNavigate } from 'react-router-dom';
 import { EventsSection } from './EventsSection';
 
 const GOOGLE_FORM_LINK = "https://docs.google.com/forms/d/e/1FAIpQLSdKRM7wXrG_F-mQyrAdKOM6A8FRKgH3ydPtQXiWaf3u01L0JQ/viewform?usp=publish-editor";
@@ -141,10 +142,17 @@ const Section = ({ className, children, id }: { className?: string; children: Re
 };
 
 export default function LandingPage() {
+  const navigate = useNavigate();
   const lenis = useLenis();
   const { scrollY } = useScroll();
   const [navHidden, setNavHidden] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (window.location.hash === '#events') {
+      navigate('/events');
+    }
+  }, [navigate]);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious() ?? 0;
@@ -263,25 +271,45 @@ export default function LandingPage() {
           <div className="hidden md:flex items-center gap-2 text-sm font-medium text-slate-300">
              {[
                { name: 'Program', id: 'how-it-works' },
-               { name: 'Events', id: 'events' },
+               { name: 'Events', id: 'events', isAction: true },
                { name: 'Voices', id: 'voices' },
                { name: 'Partner', id: 'partner' },
                { name: 'Contact', id: 'contact' }
              ].map((item, idx) => (
-                 <motion.a 
-                   key={item.name}
-                   href={`#${item.id}`} 
-                   onClick={(e) => handleSmoothScroll(e, item.id)} 
-                   initial={{ opacity: 0, y: -10 }}
-                   animate={{ opacity: 1, y: 0 }}
-                   transition={{ duration: 0.5, delay: 0.2 + idx * 0.1, type: "spring", stiffness: 300, damping: 20 }}
-                   whileHover={{ scale: 1.05, color: "#fff" }}
-                   whileTap={{ scale: 0.95 }}
-                   className="px-4 py-2 rounded-full hover:bg-white/5 transition-colors relative group"
-                 >
-                    {item.name}
-                    <span className="absolute inset-x-0 bottom-0 h-[2px] bg-indigo-500 scale-x-0 group-hover:scale-x-50 transition-transform origin-center rounded-full opacity-0 group-hover:opacity-100" />
-                 </motion.a>
+                 item.isAction ? (
+                   <motion.button 
+                     key={item.name}
+                     onClick={(e) => {
+                       e.preventDefault();
+                       navigate('/events');
+                     }}
+                     initial={{ opacity: 0, y: -10 }}
+                     animate={{ opacity: 1, y: 0 }}
+                     transition={{ duration: 0.5, delay: 0.2 + idx * 0.1, type: "spring", stiffness: 300, damping: 20 }}
+                     whileHover={{ scale: 1.05, color: "#fff" }}
+                     whileTap={{ scale: 0.95 }}
+                     className="px-4 py-2 rounded-full hover:bg-white/5 transition-colors relative group cursor-pointer text-indigo-300 hover:text-white font-semibold flex items-center gap-1.5"
+                   >
+                      <span>{item.name}</span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
+                      <span className="absolute inset-x-0 bottom-0 h-[2px] bg-indigo-500 scale-x-0 group-hover:scale-x-50 transition-transform origin-center rounded-full opacity-0 group-hover:opacity-100" />
+                   </motion.button>
+                 ) : (
+                   <motion.a 
+                     key={item.name}
+                      href={"#" + item.id}
+                     onClick={(e) => handleSmoothScroll(e, item.id)} 
+                     initial={{ opacity: 0, y: -10 }}
+                     animate={{ opacity: 1, y: 0 }}
+                     transition={{ duration: 0.5, delay: 0.2 + idx * 0.1, type: "spring", stiffness: 300, damping: 20 }}
+                     whileHover={{ scale: 1.05, color: "#fff" }}
+                     whileTap={{ scale: 0.95 }}
+                     className="px-4 py-2 rounded-full hover:bg-white/5 transition-colors relative group"
+                   >
+                      {item.name}
+                      <span className="absolute inset-x-0 bottom-0 h-[2px] bg-indigo-500 scale-x-0 group-hover:scale-x-50 transition-transform origin-center rounded-full opacity-0 group-hover:opacity-100" />
+                   </motion.a>
+                 )
              ))}
           </div>
 
@@ -345,10 +373,19 @@ export default function LandingPage() {
                   Program
                   <ChevronRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
                 </a>
-                <a href="#events" onClick={(e) => { handleSmoothScroll(e, 'events'); setIsMobileMenuOpen(false); }} className="hover:text-indigo-400 transition-colors py-3 border-b border-white/5 flex items-center justify-between group">
-                  Events
-                  <ChevronRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
-                </a>
+                <button 
+                  onClick={() => { 
+                    setIsMobileMenuOpen(false); 
+                    navigate('/events'); 
+                  }} 
+                  className="hover:text-indigo-400 transition-colors py-3 border-b border-white/5 flex items-center justify-between group cursor-pointer text-left w-full text-lg font-medium text-slate-200"
+                >
+                  <span className="flex items-center gap-2">
+                    Events
+                    <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">New</span>
+                  </span>
+                  <ChevronRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0 text-indigo-400" />
+                </button>
                 <a href="#voices" onClick={(e) => { handleSmoothScroll(e, 'voices'); setIsMobileMenuOpen(false); }} className="hover:text-indigo-400 transition-colors py-3 border-b border-white/5 flex items-center justify-between group">
                   Voices
                   <ChevronRight className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
@@ -1116,9 +1153,6 @@ export default function LandingPage() {
         </div>
       </Section>
 
-      {/* 6. EVENTS - EVENTS ORGANIZED BY E-CELL */}
-      <EventsSection />
-
       {/* TESTIMONIALS SECTION */}
       <Section id="voices">
         <div className="text-center mb-16">
@@ -1137,7 +1171,7 @@ export default function LandingPage() {
             {
               quote: "The structured approach of this program is exactly what early-stage student founders need to bridge the gap between idea and execution.",
               author: "Anshul Sir",
-              role: "Mentor",
+              role: "Faculty Coordinator",
               initials: "AS"
             },
             {
@@ -1313,14 +1347,14 @@ export default function LandingPage() {
                   <img src="https://i.pinimg.com/originals/25/0d/51/250d51aa644ad81810d1d7908838e7f5.jpg" alt="Alok Gupta" loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
                 </motion.div>
                 <h3 className="text-2xl font-bold mb-1 text-white">Alok Gupta</h3>
-                <p className="text-indigo-400 font-mono text-sm mb-8 tracking-widest uppercase">Founder</p>
+                <p className="text-indigo-400 font-mono text-sm mb-8 tracking-widest uppercase">Founder & President</p>
                 
                 <div className="flex flex-col gap-4 items-center">
                   <a href="tel:9451901542" className="flex items-center gap-3 text-slate-300 hover:text-white transition-colors px-4 py-2 rounded-lg hover:bg-white/5 w-full justify-center group">
                     <motion.div whileHover={{ scale: 1.2 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
                       <Phone className="w-5 h-5" />
                     </motion.div>
-                    9451901542
+                    +91 94519 01542
                   </a>
                   <a 
                     href="https://wa.me/919451901542" 
@@ -1339,13 +1373,13 @@ export default function LandingPage() {
             </motion.div>
           </FadeIn>
 
-          {/* Founder 2 */}
+          {/* Co-Founder & Vice President: Lakshya Khatri */}
           <FadeIn delay={0.2}>
             <motion.div 
               whileHover={{ y: -10 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="bg-gradient-to-b from-white/[0.05] to-transparent p-10 rounded-3xl border border-white/10 hover:border-indigo-500/50 transition-colors duration-300 text-center group relative overflow-hidden h-full"
+              className="bg-gradient-to-b from-white/[0.05] to-transparent p-10 rounded-3xl border border-white/10 hover:border-violet-500/50 transition-colors duration-300 text-center group relative overflow-hidden h-full"
             >
-              <div className="absolute inset-0 bg-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="absolute inset-0 bg-violet-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
               
               {/* Pulsing Background */}
               <motion.div
@@ -1363,20 +1397,20 @@ export default function LandingPage() {
                   LK
                 </motion.div>
                 <h3 className="text-2xl font-bold mb-1 text-white">Lakshya Khatri</h3>
-                <p className="text-violet-400 font-mono text-sm mb-8 tracking-widest uppercase">Co-Founder</p>
+                <p className="text-violet-400 font-mono text-sm mb-8 tracking-widest uppercase">Co-Founder & Vice President</p>
                 
                 <div className="flex flex-col gap-4 items-center">
                   <a href="tel:9251072575" className="flex items-center gap-3 text-slate-300 hover:text-white transition-colors px-4 py-2 rounded-lg hover:bg-white/5 w-full justify-center group">
                     <motion.div whileHover={{ scale: 1.2 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
                       <Phone className="w-5 h-5" />
                     </motion.div>
-                    9251072575
+                    +91 92510 72575
                   </a>
                   <a 
                     href="https://wa.me/919251072575" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="relative overflow-hidden flex items-center gap-2 bg-slate-800 border border-slate-700 text-white px-6 py-3 rounded-full text-sm font-bold hover:bg-slate-700 hover:border-indigo-400 transition-all shadow-lg shadow-indigo-900/10 w-full justify-center group"
+                    className="relative overflow-hidden flex items-center gap-2 bg-slate-800 border border-slate-700 text-white px-6 py-3 rounded-full text-sm font-bold hover:bg-slate-700 hover:border-violet-400 transition-all shadow-lg shadow-violet-900/10 w-full justify-center group"
                   >
                     <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer" />
                     <motion.div whileHover={{ scale: 1.2 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
@@ -1389,7 +1423,57 @@ export default function LandingPage() {
             </motion.div>
           </FadeIn>
 
-          {/* Mentor */}
+          {/* Co-Founder & Vice President: Aryan Joshi */}
+          <FadeIn delay={0.3}>
+            <motion.div 
+              whileHover={{ y: -10 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="bg-gradient-to-b from-white/[0.05] to-transparent p-10 rounded-3xl border border-white/10 hover:border-sky-500/50 transition-colors duration-300 text-center group relative overflow-hidden h-full"
+            >
+              <div className="absolute inset-0 bg-sky-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              
+              {/* Pulsing Background */}
+              <motion.div
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-sky-500/20 rounded-full blur-[60px]"
+                animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.5, 0.2] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+              />
+
+              <div className="relative z-10">
+                <motion.div 
+                  whileHover={{ scale: 1.15, rotate: 5 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 10 }}
+                  className="w-24 h-24 bg-gradient-to-br from-sky-500 to-cyan-600 rounded-full mx-auto mb-6 flex items-center justify-center text-3xl font-bold text-white shadow-[0_0_20px_rgba(14,165,233,0.3)] relative"
+                >
+                  AJ
+                </motion.div>
+                <h3 className="text-2xl font-bold mb-1 text-white">Aryan Joshi</h3>
+                <p className="text-sky-400 font-mono text-sm mb-8 tracking-widest uppercase">Co-Founder & Vice President</p>
+                
+                <div className="flex flex-col gap-4 items-center">
+                  <a href="tel:+918209866190" className="flex items-center gap-3 text-slate-300 hover:text-white transition-colors px-4 py-2 rounded-lg hover:bg-white/5 w-full justify-center group">
+                    <motion.div whileHover={{ scale: 1.2 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
+                      <Phone className="w-5 h-5" />
+                    </motion.div>
+                    +91 820 986 6190
+                  </a>
+                  <a 
+                    href="https://wa.me/918209866190" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="relative overflow-hidden flex items-center gap-2 bg-slate-800 border border-slate-700 text-white px-6 py-3 rounded-full text-sm font-bold hover:bg-slate-700 hover:border-sky-400 transition-all shadow-lg shadow-sky-900/10 w-full justify-center group"
+                  >
+                    <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer" />
+                    <motion.div whileHover={{ scale: 1.2 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
+                      <WhatsAppIcon className="w-5 h-5 text-green-400" />
+                    </motion.div>
+                    <span className="relative">Chat on WhatsApp</span>
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          </FadeIn>
+
+          {/* Faculty Coordinator: Anshul Sir */}
           <FadeIn delay={0.4}>
             <motion.div 
               whileHover={{ y: -10 }}
@@ -1414,14 +1498,14 @@ export default function LandingPage() {
                   AS
                 </motion.div>
                 <h3 className="text-2xl font-bold mb-1 text-white">Anshul Sir</h3>
-                <p className="text-rose-400 font-mono text-sm mb-8 tracking-widest uppercase">Mentor</p>
+                <p className="text-rose-400 font-mono text-sm mb-8 tracking-widest uppercase">Faculty Coordinator</p>
 
                 <div className="flex flex-col gap-4 items-center">
                   <a href="tel:9468663300" className="flex items-center gap-3 text-slate-300 hover:text-white transition-colors px-4 py-2 rounded-lg hover:bg-white/5 w-full justify-center group">
                     <motion.div whileHover={{ scale: 1.2 }} transition={{ type: "spring", stiffness: 400, damping: 10 }}>
                       <Phone className="w-5 h-5" />
                     </motion.div>
-                    94686 63300
+                    +91 94686 63300
                   </a>
                   <a 
                     href="https://wa.me/919468663300" 
@@ -1568,7 +1652,7 @@ export default function LandingPage() {
           
           <div className="flex justify-center gap-8 mb-8">
             <a href="#how-it-works" onClick={(e) => handleSmoothScroll(e, 'how-it-works')} className="hover:text-indigo-400 transition-colors">Program</a>
-            <a href="#events" onClick={(e) => handleSmoothScroll(e, 'events')} className="hover:text-indigo-400 transition-colors">Events</a>
+            <button onClick={() => navigate('/events')} className="hover:text-indigo-400 transition-colors cursor-pointer">Events</button>
             <a href="#mission" onClick={(e) => handleSmoothScroll(e, 'mission')} className="hover:text-indigo-400 transition-colors">Mission</a>
             <a href="#faq" onClick={(e) => handleSmoothScroll(e, 'faq')} className="hover:text-indigo-400 transition-colors">FAQ</a>
           </div>
@@ -1583,6 +1667,6 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
-    </div>
+      </div>
   );
 }

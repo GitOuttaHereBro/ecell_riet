@@ -426,7 +426,7 @@ export const EventsSection: React.FC = () => {
               </div>
 
               {/* Modal Body */}
-              <div className="p-6 sm:p-8 space-y-8 overflow-y-auto max-h-[calc(90vh-220px)]">
+              <div data-lenis-prevent className="p-6 sm:p-8 space-y-8 overflow-y-auto max-h-[calc(90vh-220px)] overscroll-contain">
                 {/* Event Summary */}
                 <div>
                   <h4 className="text-xs font-mono text-indigo-400 uppercase tracking-wider mb-2">
